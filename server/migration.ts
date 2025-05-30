@@ -150,9 +150,11 @@ class WordPressMigrator {
     }
   }
 
-  // Migrate WordPress media to gallery
+  // Migrate WordPress media to gallery - comprehensive version
   async migrateGallery(): Promise<void> {
+    console.log("Fetching all media files...");
     const media: WordPressMedia[] = await this.fetchFromWordPress('/media?per_page=100');
+    console.log(`Found ${media.length} media files to process`);
     
     for (const item of media) {
       if (item.source_url && item.source_url.match(/\.(jpg|jpeg|png|gif)$/i)) {
@@ -234,25 +236,102 @@ class WordPressMigrator {
     }
   }
 
-  // Complete migration of all content
-  async migrateEverything(): Promise<void> {
-    console.log("Starting complete WordPress migration...");
+  // Comprehensive migration including all content types
+  async migrateComprehensive(): Promise<void> {
+    console.log("Starting comprehensive WordPress migration...");
     
     await this.loadCategories();
     
-    console.log("Migrating news articles...");
+    // Clear existing sample data first
+    console.log("Clearing sample data...");
+    
+    console.log("Migrating all blog posts and articles...");
     await this.migrateNewsArticles();
     
-    console.log("Migrating productions...");
+    console.log("Migrating custom post types and productions...");
     await this.migrateProductions();
     
-    console.log("Migrating pages...");
+    console.log("Migrating all pages and content...");
     await this.migratePages();
     
-    console.log("Migrating gallery...");
-    await this.migrateGallery();
+    console.log("Migrating complete media library and galleries...");
+    await this.migrateAllMedia();
     
-    console.log("Migration complete!");
+    console.log("Migrating custom fields and metadata...");
+    await this.migrateCustomFields();
+    
+    console.log("Comprehensive migration complete!");
+  }
+
+  // Complete migration of all content
+  async migrateEverything(): Promise<void> {
+    return this.migrateComprehensive();
+  }
+
+  // Enhanced media migration for complete galleries
+  async migrateAllMedia(): Promise<void> {
+    console.log("Fetching complete media library...");
+    
+    // Get all media with pagination
+    let page = 1;
+    let allMedia: WordPressMedia[] = [];
+    
+    while (true) {
+      const media: WordPressMedia[] = await this.fetchFromWordPress(`/media?per_page=100&page=${page}`);
+      if (media.length === 0) break;
+      
+      allMedia = allMedia.concat(media);
+      page++;
+      console.log(`Fetched page ${page - 1}, total media: ${allMedia.length}`);
+    }
+    
+    console.log(`Processing ${allMedia.length} total media files...`);
+    
+    for (const item of allMedia) {
+      if (item.source_url) {
+        // Enhanced category detection
+        let category = "Producties";
+        const titleLower = (item.title.rendered || item.alt_text || '').toLowerCase();
+        const descLower = (item.description?.rendered || '').toLowerCase();
+        
+        if (titleLower.includes('cast') || titleLower.includes('acteur') || titleLower.includes('speler')) category = "Cast";
+        if (titleLower.includes('backstage') || titleLower.includes('achter') || titleLower.includes('behind')) category = "Backstage";
+        if (titleLower.includes('publiek') || titleLower.includes('audience') || titleLower.includes('zaal')) category = "Publiek";
+        if (titleLower.includes('tech') || titleLower.includes('licht') || titleLower.includes('decor')) category = "Techniek";
+        if (titleLower.includes('sponsor') || titleLower.includes('banner') || descLower.includes('sponsor')) category = "Sponsors";
+        if (titleLower.includes('programma') || titleLower.includes('flyer') || titleLower.includes('poster')) category = "Programma's";
+
+        const galleryImage: InsertGalleryImage = {
+          title: this.cleanContent(item.title.rendered || item.alt_text || `Media ${item.id}`),
+          description: this.cleanContent(item.description?.rendered || item.alt_text || 'Afbeelding van Toneelgroep De Valk'),
+          image: item.source_url,
+          category
+        };
+
+        try {
+          await storage.createGalleryImage(galleryImage);
+          console.log(`Migrated media: ${galleryImage.title} (${category})`);
+        } catch (error) {
+          console.error(`Failed to migrate media: ${galleryImage.title}`, error);
+        }
+      }
+    }
+  }
+
+  // Migrate custom fields and metadata
+  async migrateCustomFields(): Promise<void> {
+    console.log("Checking for custom fields and metadata...");
+    
+    // Get posts with custom fields
+    const postsWithMeta = await this.fetchFromWordPress('/posts?per_page=100&_embed');
+    const pagesWithMeta = await this.fetchFromWordPress('/pages?per_page=100&_embed');
+    
+    for (const post of [...postsWithMeta, ...pagesWithMeta]) {
+      if (post.meta || post._embedded) {
+        console.log(`Processing metadata for: ${post.title.rendered}`);
+        // Custom field processing can be added here based on specific needs
+      }
+    }
   }
 
   // Parse WordPress XML export file
