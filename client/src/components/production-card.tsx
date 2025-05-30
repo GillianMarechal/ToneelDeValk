@@ -1,0 +1,97 @@
+import { type Production } from "@shared/schema";
+import { Button } from "@/components/ui/button";
+import { Calendar, Clock, Tag } from "lucide-react";
+
+interface ProductionCardProps {
+  production: Production;
+}
+
+export default function ProductionCard({ production }: ProductionCardProps) {
+  const getStatusBadge = () => {
+    switch (production.status) {
+      case "current":
+        return <span className="bg-theatre-red text-white px-3 py-1 rounded-full text-sm font-semibold">Nu Speelt</span>;
+      case "upcoming":
+        return <span className="bg-theatre-gold text-theatre-navy px-3 py-1 rounded-full text-sm font-semibold">Binnenkort</span>;
+      case "past":
+        return <span className="bg-theatre-charcoal text-white px-3 py-1 rounded-full text-sm font-semibold">Gespeeld</span>;
+      default:
+        return <span className="bg-gray-500 text-white px-3 py-1 rounded-full text-sm font-semibold">Status Onbekend</span>;
+    }
+  };
+
+  const getActionButton = () => {
+    switch (production.status) {
+      case "current":
+        return (
+          <Button className="text-theatre-red hover:text-theatre-gold font-semibold bg-transparent p-0 h-auto">
+            Reserveer →
+          </Button>
+        );
+      case "upcoming":
+        return (
+          <Button className="text-theatre-red hover:text-theatre-gold font-semibold bg-transparent p-0 h-auto">
+            Informeer Mij →
+          </Button>
+        );
+      case "past":
+        return (
+          <Button className="text-theatre-red hover:text-theatre-gold font-semibold bg-transparent p-0 h-auto">
+            Bekijk Details →
+          </Button>
+        );
+      default:
+        return (
+          <Button className="text-theatre-red hover:text-theatre-gold font-semibold bg-transparent p-0 h-auto">
+            Meer Info →
+          </Button>
+        );
+    }
+  };
+
+  return (
+    <div className="bg-white rounded-xl shadow-lg overflow-hidden card-hover group">
+      <div className="relative">
+        <img 
+          src={production.image} 
+          alt={`Poster van ${production.title}`}
+          className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" 
+        />
+        <div className="absolute top-4 left-4">
+          {getStatusBadge()}
+        </div>
+        <div className="absolute top-4 right-4">
+          <span className="bg-black/50 text-white px-2 py-1 rounded text-sm flex items-center">
+            <Clock className="w-3 h-3 mr-1" />
+            {production.duration}
+          </span>
+        </div>
+      </div>
+      
+      <div className="p-6">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-theatre-gold font-semibold text-sm flex items-center">
+            <Tag className="w-3 h-3 mr-1" />
+            {production.genre}
+          </span>
+        </div>
+        
+        <h3 className="text-xl font-playfair font-bold text-theatre-navy mb-2 group-hover:text-theatre-red transition-colors">
+          {production.title}
+        </h3>
+        
+        <p className="text-theatre-charcoal mb-4 text-sm leading-relaxed line-clamp-3">
+          {production.description}
+        </p>
+        
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-theatre-charcoal flex items-center">
+            <Calendar className="w-3 h-3 mr-1" />
+            {production.dates}
+          </span>
+          {getActionButton()}
+        </div>
+      </div>
+    </div>
+  );
+}
