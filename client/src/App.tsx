@@ -11,6 +11,7 @@ import Cast from "@/pages/cast";
 import News from "@/pages/news";
 import Gallery from "@/pages/gallery";
 import Contact from "@/pages/contact";
+import Admin from "@/pages/admin";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 
@@ -27,6 +28,7 @@ function Router() {
           <Route path="/news" component={News} />
           <Route path="/gallery" component={Gallery} />
           <Route path="/contact" component={Contact} />
+          <Route path="/admin" component={Admin} />
           <Route component={NotFound} />
         </Switch>
       </main>

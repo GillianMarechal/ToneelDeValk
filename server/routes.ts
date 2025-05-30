@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertContactMessageSchema } from "@shared/schema";
 import { z } from "zod";
+import { WordPressMigrator, CSVImporter } from "./migration";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Productions routes
@@ -130,6 +131,69 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       res.status(500).json({ message: "Failed to send contact message" });
+    }
+  });
+
+  // Migration routes
+  app.post("/api/migrate/wordpress", async (req, res) => {
+    try {
+      const { wpSiteUrl, contentType } = req.body;
+      
+      if (!wpSiteUrl) {
+        return res.status(400).json({ message: "WordPress site URL is required" });
+      }
+
+      const migrator = new WordPressMigrator(wpSiteUrl);
+      
+      switch (contentType) {
+        case "news":
+          await migrator.migrateNewsArticles();
+          break;
+        case "productions":
+          await migrator.migrateProductions();
+          break;
+        case "gallery":
+          await migrator.migrateGallery();
+          break;
+        case "all":
+          await migrator.migrateNewsArticles();
+          await migrator.migrateProductions();
+          await migrator.migrateGallery();
+          break;
+        default:
+          return res.status(400).json({ message: "Invalid content type" });
+      }
+
+      res.json({ message: `Successfully migrated ${contentType} from WordPress` });
+    } catch (error) {
+      console.error("Migration error:", error);
+      res.status(500).json({ message: "Migration failed", error: error instanceof Error ? error.message : "Unknown error" });
+    }
+  });
+
+  app.post("/api/migrate/csv", async (req, res) => {
+    try {
+      const { csvContent, contentType } = req.body;
+      
+      if (!csvContent) {
+        return res.status(400).json({ message: "CSV content is required" });
+      }
+
+      switch (contentType) {
+        case "news":
+          await CSVImporter.importNewsFromCSV(csvContent);
+          break;
+        case "productions":
+          await CSVImporter.importProductionsFromCSV(csvContent);
+          break;
+        default:
+          return res.status(400).json({ message: "Invalid content type for CSV import" });
+      }
+
+      res.json({ message: `Successfully imported ${contentType} from CSV` });
+    } catch (error) {
+      console.error("CSV import error:", error);
+      res.status(500).json({ message: "CSV import failed", error: error instanceof Error ? error.message : "Unknown error" });
     }
   });
 
