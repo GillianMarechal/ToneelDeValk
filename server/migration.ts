@@ -152,35 +152,7 @@ class WordPressMigrator {
 
   // Migrate WordPress media to gallery - comprehensive version
   async migrateGallery(): Promise<void> {
-    console.log("Fetching all media files...");
-    const media: WordPressMedia[] = await this.fetchFromWordPress('/media?per_page=100');
-    console.log(`Found ${media.length} media files to process`);
-    
-    for (const item of media) {
-      if (item.source_url && item.source_url.match(/\.(jpg|jpeg|png|gif)$/i)) {
-        // Determine category based on alt text or title
-        let category = "Producties";
-        const titleLower = (item.title.rendered || item.alt_text || '').toLowerCase();
-        if (titleLower.includes('cast') || titleLower.includes('acteur')) category = "Cast";
-        if (titleLower.includes('backstage') || titleLower.includes('achter')) category = "Backstage";
-        if (titleLower.includes('publiek') || titleLower.includes('audience')) category = "Publiek";
-        if (titleLower.includes('tech') || titleLower.includes('licht')) category = "Techniek";
-
-        const galleryImage: InsertGalleryImage = {
-          title: this.cleanContent(item.title.rendered || item.alt_text || 'Theater foto'),
-          description: this.cleanContent(item.description.rendered || item.alt_text || 'Foto van onze voorstelling'),
-          image: item.source_url,
-          category
-        };
-
-        try {
-          await storage.createGalleryImage(galleryImage);
-          console.log(`Migrated gallery image: ${galleryImage.title}`);
-        } catch (error) {
-          console.error(`Failed to migrate image: ${galleryImage.title}`, error);
-        }
-      }
-    }
+    return this.migrateAllMedia();
   }
 
   // Migrate WordPress pages that might contain theatre information
@@ -289,30 +261,42 @@ class WordPressMigrator {
     
     for (const item of allMedia) {
       if (item.source_url) {
-        // Enhanced category detection
+        // Enhanced category detection for all media types
         let category = "Producties";
         const titleLower = (item.title.rendered || item.alt_text || '').toLowerCase();
         const descLower = (item.description?.rendered || '').toLowerCase();
+        const urlLower = item.source_url.toLowerCase();
         
+        // Specific show detection
+        if (titleLower.includes('dwaasheid') || urlLower.includes('dwaasheid')) category = "Dwaasheid";
+        if (titleLower.includes('coo coo') || urlLower.includes('coo-coo')) category = "Coo Coo";
+        
+        // General categorization
+        if (titleLower.includes('programma') || titleLower.includes('flyer') || urlLower.includes('programma')) category = "Programma's";
+        if (titleLower.includes('sponsor') || titleLower.includes('banner') || descLower.includes('sponsor')) category = "Sponsors";
         if (titleLower.includes('cast') || titleLower.includes('acteur') || titleLower.includes('speler')) category = "Cast";
         if (titleLower.includes('backstage') || titleLower.includes('achter') || titleLower.includes('behind')) category = "Backstage";
         if (titleLower.includes('publiek') || titleLower.includes('audience') || titleLower.includes('zaal')) category = "Publiek";
         if (titleLower.includes('tech') || titleLower.includes('licht') || titleLower.includes('decor')) category = "Techniek";
-        if (titleLower.includes('sponsor') || titleLower.includes('banner') || descLower.includes('sponsor')) category = "Sponsors";
-        if (titleLower.includes('programma') || titleLower.includes('flyer') || titleLower.includes('poster')) category = "Programma's";
 
-        const galleryImage: InsertGalleryImage = {
-          title: this.cleanContent(item.title.rendered || item.alt_text || `Media ${item.id}`),
-          description: this.cleanContent(item.description?.rendered || item.alt_text || 'Afbeelding van Toneelgroep De Valk'),
-          image: item.source_url,
-          category
-        };
+        // Handle both images and PDFs
+        const isPDF = item.source_url.endsWith('.pdf');
+        const isImage = item.source_url.match(/\.(jpg|jpeg|png|gif)$/i);
+        
+        if (isPDF || isImage) {
+          const galleryImage: InsertGalleryImage = {
+            title: this.cleanContent(item.title.rendered || item.alt_text || `${isPDF ? 'Document' : 'Afbeelding'} ${item.id}`),
+            description: this.cleanContent(item.description?.rendered || item.alt_text || (isPDF ? 'PDF document van Toneelgroep De Valk' : 'Afbeelding van Toneelgroep De Valk')),
+            image: item.source_url,
+            category
+          };
 
-        try {
-          await storage.createGalleryImage(galleryImage);
-          console.log(`Migrated media: ${galleryImage.title} (${category})`);
-        } catch (error) {
-          console.error(`Failed to migrate media: ${galleryImage.title}`, error);
+          try {
+            await storage.createGalleryImage(galleryImage);
+            console.log(`Migrated ${isPDF ? 'PDF' : 'image'}: ${galleryImage.title} (${category})`);
+          } catch (error) {
+            console.error(`Failed to migrate ${isPDF ? 'PDF' : 'image'}: ${galleryImage.title}`, error);
+          }
         }
       }
     }

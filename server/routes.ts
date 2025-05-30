@@ -158,6 +158,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         case "all":
           await migrator.migrateEverything();
           break;
+        case "comprehensive":
+          await migrator.migrateComprehensive();
+          break;
         case "pages":
           await migrator.migratePages();
           break;
