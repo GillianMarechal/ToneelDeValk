@@ -244,20 +244,15 @@ class WordPressMigrator {
   async migrateAllMedia(): Promise<void> {
     console.log("Fetching complete media library...");
     
-    // Get all media with pagination
-    let page = 1;
-    let allMedia: WordPressMedia[] = [];
+    // Get all media in a single request since we know there are only 15 files
+    const allMedia: WordPressMedia[] = await this.fetchFromWordPress('/media?per_page=100');
     
-    while (true) {
-      const media: WordPressMedia[] = await this.fetchFromWordPress(`/media?per_page=100&page=${page}`);
-      if (media.length === 0) break;
-      
-      allMedia = allMedia.concat(media);
-      page++;
-      console.log(`Fetched page ${page - 1}, total media: ${allMedia.length}`);
-    }
+    console.log(`Found ${allMedia.length} total media files to process...`);
     
-    console.log(`Processing ${allMedia.length} total media files...`);
+    // Debug: log all media files found
+    allMedia.forEach(item => {
+      console.log(`Media file: ${item.title.rendered} - ${item.source_url}`);
+    });
     
     for (const item of allMedia) {
       if (item.source_url) {
