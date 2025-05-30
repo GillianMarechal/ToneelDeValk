@@ -35,15 +35,27 @@ interface WordPressCategory {
 class WordPressMigrator {
   private wpBaseUrl: string;
   private categoryMap: Map<number, string> = new Map();
+  private auth?: string;
 
-  constructor(wpSiteUrl: string) {
+  constructor(wpSiteUrl: string, username?: string, password?: string) {
     this.wpBaseUrl = `${wpSiteUrl}/wp-json/wp/v2`;
+    if (username && password) {
+      this.auth = Buffer.from(`${username}:${password}`).toString('base64');
+    }
   }
 
   // Fetch data from WordPress REST API
   private async fetchFromWordPress(endpoint: string): Promise<any[]> {
     try {
-      const response = await fetch(`${this.wpBaseUrl}${endpoint}`);
+      const headers: HeadersInit = {
+        'Content-Type': 'application/json'
+      };
+      
+      if (this.auth) {
+        headers['Authorization'] = `Basic ${this.auth}`;
+      }
+
+      const response = await fetch(`${this.wpBaseUrl}${endpoint}`, { headers });
       if (!response.ok) {
         throw new Error(`Failed to fetch from WordPress: ${response.statusText}`);
       }
@@ -144,11 +156,19 @@ class WordPressMigrator {
     
     for (const item of media) {
       if (item.source_url && item.source_url.match(/\.(jpg|jpeg|png|gif)$/i)) {
+        // Determine category based on alt text or title
+        let category = "Producties";
+        const titleLower = (item.title.rendered || item.alt_text || '').toLowerCase();
+        if (titleLower.includes('cast') || titleLower.includes('acteur')) category = "Cast";
+        if (titleLower.includes('backstage') || titleLower.includes('achter')) category = "Backstage";
+        if (titleLower.includes('publiek') || titleLower.includes('audience')) category = "Publiek";
+        if (titleLower.includes('tech') || titleLower.includes('licht')) category = "Techniek";
+
         const galleryImage: InsertGalleryImage = {
-          title: this.cleanContent(item.title.rendered || 'Theater foto'),
+          title: this.cleanContent(item.title.rendered || item.alt_text || 'Theater foto'),
           description: this.cleanContent(item.description.rendered || item.alt_text || 'Foto van onze voorstelling'),
           image: item.source_url,
-          category: "Producties"
+          category
         };
 
         try {
@@ -159,6 +179,80 @@ class WordPressMigrator {
         }
       }
     }
+  }
+
+  // Migrate WordPress pages that might contain theatre information
+  async migratePages(): Promise<void> {
+    const pages: WordPressPost[] = await this.fetchFromWordPress('/pages?per_page=100');
+    
+    for (const page of pages) {
+      const title = this.cleanContent(page.title.rendered).toLowerCase();
+      
+      // Check if this looks like production/show content
+      if (title.includes('productie') || title.includes('voorstelling') || 
+          title.includes('show') || title.includes('theater') ||
+          title.includes('toneel') || title.includes('seizoen')) {
+        
+        const production: InsertProduction = {
+          title: this.cleanContent(page.title.rendered),
+          description: this.cleanContent(page.excerpt.rendered || page.content.rendered).substring(0, 500),
+          duration: "2u 00min", // Default, can be updated manually
+          dates: "Data volgt", // Default, can be updated manually
+          status: "past", // Most likely past shows
+          image: "https://images.unsplash.com/photo-1503095396549-807759245b35?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250",
+          genre: "Theater"
+        };
+
+        try {
+          await storage.createProduction(production);
+          console.log(`Migrated page as production: ${production.title}`);
+        } catch (error) {
+          console.error(`Failed to migrate page: ${production.title}`, error);
+        }
+      }
+      
+      // Check if this looks like news content
+      else if (title.includes('nieuws') || title.includes('bericht') || 
+               title.includes('aankondiging') || title.includes('review')) {
+        
+        const newsArticle: InsertNewsArticle = {
+          title: this.cleanContent(page.title.rendered),
+          excerpt: this.cleanContent(page.excerpt.rendered || page.content.rendered.substring(0, 200)),
+          content: this.cleanContent(page.content.rendered),
+          date: new Date(page.date).toLocaleDateString('nl-NL'),
+          category: "Algemeen",
+          featured: false
+        };
+
+        try {
+          await storage.createNewsArticle(newsArticle);
+          console.log(`Migrated page as news: ${newsArticle.title}`);
+        } catch (error) {
+          console.error(`Failed to migrate page: ${newsArticle.title}`, error);
+        }
+      }
+    }
+  }
+
+  // Complete migration of all content
+  async migrateEverything(): Promise<void> {
+    console.log("Starting complete WordPress migration...");
+    
+    await this.loadCategories();
+    
+    console.log("Migrating news articles...");
+    await this.migrateNewsArticles();
+    
+    console.log("Migrating productions...");
+    await this.migrateProductions();
+    
+    console.log("Migrating pages...");
+    await this.migratePages();
+    
+    console.log("Migrating gallery...");
+    await this.migrateGallery();
+    
+    console.log("Migration complete!");
   }
 
   // Parse WordPress XML export file

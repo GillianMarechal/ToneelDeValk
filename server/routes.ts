@@ -137,13 +137,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Migration routes
   app.post("/api/migrate/wordpress", async (req, res) => {
     try {
-      const { wpSiteUrl, contentType } = req.body;
+      const { wpSiteUrl, contentType, username, password } = req.body;
       
       if (!wpSiteUrl) {
         return res.status(400).json({ message: "WordPress site URL is required" });
       }
 
-      const migrator = new WordPressMigrator(wpSiteUrl);
+      const migrator = new WordPressMigrator(wpSiteUrl, username, password);
       
       switch (contentType) {
         case "news":

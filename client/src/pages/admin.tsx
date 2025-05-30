@@ -11,13 +11,15 @@ import { apiRequest } from "@/lib/queryClient";
 import { Upload, Download, Globe, FileText, Image, Users } from "lucide-react";
 
 export default function Admin() {
-  const [wpSiteUrl, setWpSiteUrl] = useState("");
+  const [wpSiteUrl, setWpSiteUrl] = useState("https://www.toneeldevalk.be");
+  const [wpUsername, setWpUsername] = useState("");
+  const [wpPassword, setWpPassword] = useState("");
   const [csvContent, setCsvContent] = useState("");
   const { toast } = useToast();
 
   const wordpressMigration = useMutation({
-    mutationFn: async ({ wpSiteUrl, contentType }: { wpSiteUrl: string; contentType: string }) => {
-      return await apiRequest("POST", "/api/migrate/wordpress", { wpSiteUrl, contentType });
+    mutationFn: async ({ wpSiteUrl, contentType, username, password }: { wpSiteUrl: string; contentType: string; username?: string; password?: string }) => {
+      return await apiRequest("POST", "/api/migrate/wordpress", { wpSiteUrl, contentType, username, password });
     },
     onSuccess: (_, { contentType }) => {
       toast({
@@ -63,7 +65,12 @@ export default function Admin() {
       });
       return;
     }
-    wordpressMigration.mutate({ wpSiteUrl: wpSiteUrl.trim(), contentType });
+    wordpressMigration.mutate({ 
+      wpSiteUrl: wpSiteUrl.trim(), 
+      contentType,
+      username: wpUsername.trim() || undefined,
+      password: wpPassword.trim() || undefined
+    });
   };
 
   const handleCSVImport = (contentType: string) => {
@@ -131,18 +138,46 @@ export default function Admin() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div>
-                  <label className="block text-sm font-semibold text-theatre-navy mb-2">
-                    WordPress Site URL
-                  </label>
-                  <Input
-                    placeholder="https://youroldsite.com"
-                    value={wpSiteUrl}
-                    onChange={(e) => setWpSiteUrl(e.target.value)}
-                    className="max-w-md"
-                  />
-                  <p className="text-sm text-gray-500 mt-1">
-                    Enter the full URL of your WordPress site (must have REST API enabled)
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-theatre-navy mb-2">
+                      WordPress Site URL
+                    </label>
+                    <Input
+                      placeholder="https://www.toneeldevalk.be"
+                      value={wpSiteUrl}
+                      onChange={(e) => setWpSiteUrl(e.target.value)}
+                      className="max-w-md"
+                    />
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4 max-w-md">
+                    <div>
+                      <label className="block text-sm font-semibold text-theatre-navy mb-2">
+                        Username (Optional)
+                      </label>
+                      <Input
+                        placeholder="admin username"
+                        value={wpUsername}
+                        onChange={(e) => setWpUsername(e.target.value)}
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-semibold text-theatre-navy mb-2">
+                        Password (Optional)
+                      </label>
+                      <Input
+                        type="password"
+                        placeholder="admin password"
+                        value={wpPassword}
+                        onChange={(e) => setWpPassword(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  
+                  <p className="text-sm text-gray-500">
+                    Username and password are only needed for private content or better access to images
                   </p>
                 </div>
 
