@@ -156,9 +156,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
           await migrator.migrateGallery();
           break;
         case "all":
-          await migrator.migrateNewsArticles();
-          await migrator.migrateProductions();
-          await migrator.migrateGallery();
+          await migrator.migrateEverything();
+          break;
+        case "pages":
+          await migrator.migratePages();
           break;
         default:
           return res.status(400).json({ message: "Invalid content type" });

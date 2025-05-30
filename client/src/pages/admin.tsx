@@ -181,23 +181,23 @@ export default function Admin() {
                   </p>
                 </div>
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                   <Button
                     onClick={() => handleWordPressMigration("news")}
                     disabled={wordpressMigration.isPending}
                     className="bg-theatre-red hover:bg-red-700 text-white"
                   >
                     <FileText className="w-4 h-4 mr-2" />
-                    Import News
+                    Import Blog Posts
                   </Button>
 
                   <Button
-                    onClick={() => handleWordPressMigration("productions")}
+                    onClick={() => handleWordPressMigration("pages")}
                     disabled={wordpressMigration.isPending}
                     className="bg-theatre-gold hover:bg-yellow-600 text-theatre-navy"
                   >
                     <Users className="w-4 h-4 mr-2" />
-                    Import Productions
+                    Import Pages
                   </Button>
 
                   <Button
@@ -206,17 +206,19 @@ export default function Admin() {
                     className="bg-theatre-navy hover:bg-theatre-charcoal text-white"
                   >
                     <Image className="w-4 h-4 mr-2" />
-                    Import Gallery
+                    Import Images
                   </Button>
+                </div>
 
+                <div className="pt-4 border-t">
                   <Button
                     onClick={() => handleWordPressMigration("all")}
                     disabled={wordpressMigration.isPending}
-                    variant="outline"
-                    className="border-theatre-navy text-theatre-navy hover:bg-theatre-navy hover:text-white"
+                    size="lg"
+                    className="w-full bg-gradient-to-r from-theatre-red to-theatre-navy hover:from-red-700 hover:to-theatre-charcoal text-white"
                   >
                     <Download className="w-4 h-4 mr-2" />
-                    Import All
+                    Import Everything from WordPress
                   </Button>
                 </div>
 
