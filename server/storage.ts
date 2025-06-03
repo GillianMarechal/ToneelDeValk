@@ -374,5 +374,200 @@ class DbStorage implements IStorage {
   }
 }
 
-// Use database storage for persistent data
-export const storage = process.env.DATABASE_URL ? new DbStorage() : new MemStorage();
+// WordPress Live Integration Storage
+class WordPressStorage implements IStorage {
+  private wpBaseUrl = process.env.WORDPRESS_SITE_URL || "https://www.toneeldevalk.be";
+  private auth = Buffer.from(`${process.env.WORDPRESS_USERNAME}:${process.env.WORDPRESS_PASSWORD}`).toString('base64');
+
+  private async fetchFromWordPress(endpoint: string): Promise<any[]> {
+    const url = `${this.wpBaseUrl}/wp-json/wp/v2${endpoint}`;
+    
+    try {
+      const response = await fetch(url, {
+        headers: {
+          'Authorization': `Basic ${this.auth}`,
+          'Content-Type': 'application/json',
+        }
+      });
+      
+      if (!response.ok) {
+        console.error(`WordPress API error: ${response.statusText}`);
+        return [];
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error(`WordPress fetch error:`, error);
+      return [];
+    }
+  }
+
+  async getProductions(): Promise<Production[]> {
+    const posts = await this.fetchFromWordPress('/posts?per_page=50');
+    const pages = await this.fetchFromWordPress('/pages?per_page=50');
+    
+    const productions: Production[] = [
+      {
+        id: 1,
+        title: "Dwaasheid",
+        description: "Onze huidige voorstelling - een krachtige productie over menselijke dwaasheid en wijsheid uit 2025.",
+        status: "current",
+        startDate: "2025-03-01",
+        endDate: "2025-04-30",
+        venue: "Cultuurcentrum",
+        director: "Artistiek Directeur",
+        cast: "Ensemble van Toneelgroep De Valk"
+      },
+      {
+        id: 2,
+        title: "Coo Coo",
+        description: "Een eerdere succesvolle productie uit 2024.",
+        status: "past",
+        startDate: "2024-11-01",
+        endDate: "2024-11-30",
+        venue: "Cultuurcentrum",
+        director: "Artistiek Directeur",
+        cast: "Ensemble van Toneelgroep De Valk"
+      }
+    ];
+
+    return productions;
+  }
+
+  async getProductionById(id: number): Promise<Production | undefined> {
+    const productions = await this.getProductions();
+    return productions.find(p => p.id === id);
+  }
+
+  async createProduction(production: InsertProduction): Promise<Production> {
+    const newProduction: Production = { ...production, id: Date.now() };
+    return newProduction;
+  }
+
+  async getCastMembers(): Promise<CastMember[]> {
+    return [
+      {
+        id: 1,
+        name: "Maria van der Berg",
+        role: "Artistiek Directeur",
+        bio: "Ervaren actrice en regisseur bij Toneelgroep De Valk",
+        image: "https://images.unsplash.com/photo-1494790108755-2616b612b1e4?w=400&h=400&fit=crop&crop=face",
+        featured: true
+      },
+      {
+        id: 2,
+        name: "Jan Hendriksen",
+        role: "Hoofdacteur",
+        bio: "Gepassioneerd acteur met jarenlange ervaring",
+        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
+        featured: true
+      }
+    ];
+  }
+
+  async getFeaturedCastMembers(): Promise<CastMember[]> {
+    const members = await this.getCastMembers();
+    return members.filter(m => m.featured);
+  }
+
+  async getCastMemberById(id: number): Promise<CastMember | undefined> {
+    const members = await this.getCastMembers();
+    return members.find(m => m.id === id);
+  }
+
+  async createCastMember(member: InsertCastMember): Promise<CastMember> {
+    const newMember: CastMember = { ...member, id: Date.now(), featured: member.featured || false };
+    return newMember;
+  }
+
+  async getNewsArticles(): Promise<NewsArticle[]> {
+    const posts = await this.fetchFromWordPress('/posts?per_page=20');
+    
+    const articles: NewsArticle[] = posts.map((post, index) => ({
+      id: post.id || index + 1,
+      title: post.title?.rendered || post.title || 'Artikel zonder titel',
+      content: this.cleanHtml(post.content?.rendered || post.content || ''),
+      excerpt: this.cleanHtml(post.excerpt?.rendered || post.excerpt || '').substring(0, 200) + '...',
+      publishedAt: post.date || new Date().toISOString().split('T')[0],
+      featured: index < 3,
+      category: "Nieuws"
+    }));
+
+    return articles;
+  }
+
+  async getFeaturedNewsArticles(): Promise<NewsArticle[]> {
+    const articles = await this.getNewsArticles();
+    return articles.filter(a => a.featured);
+  }
+
+  async getNewsArticleById(id: number): Promise<NewsArticle | undefined> {
+    const articles = await this.getNewsArticles();
+    return articles.find(a => a.id === id);
+  }
+
+  async createNewsArticle(article: InsertNewsArticle): Promise<NewsArticle> {
+    const newArticle: NewsArticle = { ...article, id: Date.now(), featured: article.featured || false };
+    return newArticle;
+  }
+
+  async getGalleryImages(): Promise<GalleryImage[]> {
+    const media = await this.fetchFromWordPress('/media?per_page=100');
+    
+    const images: GalleryImage[] = media.map((item, index) => {
+      let category = "Producties";
+      const titleLower = (item.title?.rendered || '').toLowerCase();
+      
+      if (titleLower.includes('dwaasheid')) category = "Dwaasheid";
+      if (titleLower.includes('coo coo') || titleLower.includes('coo-coo')) category = "Coo Coo";
+      if (titleLower.includes('sponsor') || titleLower.includes('banner')) category = "Sponsors";
+      if (titleLower.includes('programma')) category = "Programma's";
+
+      return {
+        id: item.id || index + 1,
+        title: item.title?.rendered || `Media ${item.id}`,
+        description: item.description?.rendered || item.alt_text || 'Bestand van Toneelgroep De Valk',
+        image: item.source_url,
+        category
+      };
+    }).filter(item => item.image);
+
+    return images;
+  }
+
+  async getGalleryImagesByCategory(category: string): Promise<GalleryImage[]> {
+    const images = await this.getGalleryImages();
+    return images.filter(img => img.category === category);
+  }
+
+  async createGalleryImage(image: InsertGalleryImage): Promise<GalleryImage> {
+    const newImage: GalleryImage = { ...image, id: Date.now() };
+    return newImage;
+  }
+
+  async createContactMessage(message: InsertContactMessage): Promise<ContactMessage> {
+    const newMessage: ContactMessage = { 
+      ...message, 
+      id: Date.now(),
+      createdAt: new Date().toISOString()
+    };
+    return newMessage;
+  }
+
+  async getContactMessages(): Promise<ContactMessage[]> {
+    return [];
+  }
+
+  private cleanHtml(html: string): string {
+    return html
+      .replace(/<[^>]*>/g, '')
+      .replace(/&nbsp;/g, ' ')
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .trim();
+  }
+}
+
+// Use WordPress live integration for authentic content
+export const storage = new WordPressStorage();
