@@ -15,6 +15,12 @@ import {
   type InsertGalleryImage,
   type InsertContactMessage,
 } from "@shared/schema";
+import { drizzle } from "drizzle-orm/neon-http";
+import { neon } from "@neondatabase/serverless";
+import { eq, desc } from "drizzle-orm";
+
+const sql = neon(process.env.DATABASE_URL!);
+const db = drizzle(sql);
 
 export interface IStorage {
   // Productions
@@ -293,4 +299,80 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+// Database Storage Implementation
+class DbStorage implements IStorage {
+  async getProductions(): Promise<Production[]> {
+    return await db.select().from(productions);
+  }
+
+  async getProductionById(id: number): Promise<Production | undefined> {
+    const result = await db.select().from(productions).where(eq(productions.id, id));
+    return result[0];
+  }
+
+  async createProduction(production: InsertProduction): Promise<Production> {
+    const result = await db.insert(productions).values(production).returning();
+    return result[0];
+  }
+
+  async getCastMembers(): Promise<CastMember[]> {
+    return await db.select().from(castMembers);
+  }
+
+  async getFeaturedCastMembers(): Promise<CastMember[]> {
+    return await db.select().from(castMembers).where(eq(castMembers.featured, true));
+  }
+
+  async getCastMemberById(id: number): Promise<CastMember | undefined> {
+    const result = await db.select().from(castMembers).where(eq(castMembers.id, id));
+    return result[0];
+  }
+
+  async createCastMember(member: InsertCastMember): Promise<CastMember> {
+    const result = await db.insert(castMembers).values(member).returning();
+    return result[0];
+  }
+
+  async getNewsArticles(): Promise<NewsArticle[]> {
+    return await db.select().from(newsArticles).orderBy(desc(newsArticles.publishedAt));
+  }
+
+  async getFeaturedNewsArticles(): Promise<NewsArticle[]> {
+    return await db.select().from(newsArticles).where(eq(newsArticles.featured, true));
+  }
+
+  async getNewsArticleById(id: number): Promise<NewsArticle | undefined> {
+    const result = await db.select().from(newsArticles).where(eq(newsArticles.id, id));
+    return result[0];
+  }
+
+  async createNewsArticle(article: InsertNewsArticle): Promise<NewsArticle> {
+    const result = await db.insert(newsArticles).values(article).returning();
+    return result[0];
+  }
+
+  async getGalleryImages(): Promise<GalleryImage[]> {
+    return await db.select().from(galleryImages);
+  }
+
+  async getGalleryImagesByCategory(category: string): Promise<GalleryImage[]> {
+    return await db.select().from(galleryImages).where(eq(galleryImages.category, category));
+  }
+
+  async createGalleryImage(image: InsertGalleryImage): Promise<GalleryImage> {
+    const result = await db.insert(galleryImages).values(image).returning();
+    return result[0];
+  }
+
+  async createContactMessage(message: InsertContactMessage): Promise<ContactMessage> {
+    const result = await db.insert(contactMessages).values(message).returning();
+    return result[0];
+  }
+
+  async getContactMessages(): Promise<ContactMessage[]> {
+    return await db.select().from(contactMessages);
+  }
+}
+
+// Use database storage for persistent data
+export const storage = process.env.DATABASE_URL ? new DbStorage() : new MemStorage();
