@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { insertContactMessageSchema } from "@shared/schema";
 import { z } from "zod";
 import { WordPressMigrator, CSVImporter } from "./migration";
+import { WordPressScraper } from "./scraper";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Productions routes

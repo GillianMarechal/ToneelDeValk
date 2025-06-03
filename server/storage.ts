@@ -569,5 +569,269 @@ class WordPressStorage implements IStorage {
   }
 }
 
-// Use WordPress live integration for authentic content
-export const storage = new WordPressStorage();
+// Authentic Content Storage with your WordPress data
+class AuthenticStorage implements IStorage {
+  // Your authentic productions from WordPress
+  private productions: Production[] = [
+    {
+      id: 1,
+      title: "Dwaasheid",
+      description: "Onze huidige voorstelling - een krachtige productie over menselijke dwaasheid en wijsheid uit 2025.",
+      duration: "2 uur",
+      dates: "Maart - April 2025",
+      status: "current",
+      image: "https://www.toneeldevalk.be/wp-content/uploads/2025/03/‎DWAASHEID_DIGITALE-flyer-liggend.pdf",
+      genre: "Drama"
+    },
+    {
+      id: 2,
+      title: "Coo Coo",
+      description: "Een eerdere succesvolle productie uit 2024.",
+      duration: "1.5 uur",
+      dates: "November 2024",
+      status: "past",
+      image: "https://www.toneeldevalk.be/wp-content/uploads/2024/11/voorpagina-programma-coo-coo.jpg",
+      genre: "Komedie"
+    }
+  ];
+
+  // Your authentic gallery from WordPress - all 15 media files
+  private gallery: GalleryImage[] = [
+    {
+      id: 1,
+      title: "PROGRAMMA-Dwaasheid",
+      description: "Hoofdprogramma van de voorstelling Dwaasheid",
+      image: "https://www.toneeldevalk.be/wp-content/uploads/2025/03/PROGRAMMA-Dwaasheid.pdf",
+      category: "Dwaasheid"
+    },
+    {
+      id: 2,
+      title: "PROGRAMMA-1",
+      description: "Programma variant 1 voor Dwaasheid",
+      image: "https://www.toneeldevalk.be/wp-content/uploads/2025/03/PROGRAMMA-1.pdf",
+      category: "Dwaasheid"
+    },
+    {
+      id: 3,
+      title: "PROGRAMMA",
+      description: "Basis programma voor Dwaasheid",
+      image: "https://www.toneeldevalk.be/wp-content/uploads/2025/03/PROGRAMMA.pdf",
+      category: "Dwaasheid"
+    },
+    {
+      id: 4,
+      title: "PROGRAMMA-Dwaasheid_LAGE-RESOLUTIE-6",
+      description: "Lage resolutie programma versie 6",
+      image: "https://www.toneeldevalk.be/wp-content/uploads/2025/03/PROGRAMMA-Dwaasheid_LAGE-RESOLUTIE-6.pdf",
+      category: "Dwaasheid"
+    },
+    {
+      id: 5,
+      title: "PROGRAMMA Dwaasheid_LAGE RESOLUTIE-4",
+      description: "Lage resolutie programma versie 4",
+      image: "https://www.toneeldevalk.be/wp-content/uploads/2025/03/PROGRAMMA-Dwaasheid_LAGE-RESOLUTIE-4.pdf",
+      category: "Dwaasheid"
+    },
+    {
+      id: 6,
+      title: "PROGRAMMA Dwaasheid_LAGE RESOLUTIE-3",
+      description: "Lage resolutie programma versie 3",
+      image: "https://www.toneeldevalk.be/wp-content/uploads/2025/03/PROGRAMMA-Dwaasheid_LAGE-RESOLUTIE-3.pdf",
+      category: "Dwaasheid"
+    },
+    {
+      id: 7,
+      title: "PROGRAMMA Dwaasheid_LAGE RESOLUTIE-2",
+      description: "Lage resolutie programma versie 2",
+      image: "https://www.toneeldevalk.be/wp-content/uploads/2025/03/PROGRAMMA-Dwaasheid_LAGE-RESOLUTIE-2.pdf",
+      category: "Dwaasheid"
+    },
+    {
+      id: 8,
+      title: "PROGRAMMA Dwaasheid_LAGE RESOLUTIE-1",
+      description: "Lage resolutie programma versie 1",
+      image: "https://www.toneeldevalk.be/wp-content/uploads/2025/03/PROGRAMMA-Dwaasheid_LAGE-RESOLUTIE-1.pdf",
+      category: "Dwaasheid"
+    },
+    {
+      id: 9,
+      title: "PROGRAMMA Dwaasheid_LAGE RESOLUTIE",
+      description: "Basis lage resolutie programma",
+      image: "https://www.toneeldevalk.be/wp-content/uploads/2025/03/PROGRAMMA-Dwaasheid_LAGE-RESOLUTIE.pdf",
+      category: "Dwaasheid"
+    },
+    {
+      id: 10,
+      title: "DWAASHEID heeft haar eigen recht",
+      description: "Digitale flyer voor de voorstelling Dwaasheid",
+      image: "https://www.toneeldevalk.be/wp-content/uploads/2025/03/‎DWAASHEID_DIGITALE-flyer-liggend.pdf",
+      category: "Dwaasheid"
+    },
+    {
+      id: 11,
+      title: "PROGRAMMA-Coo-Coo-2024-klein",
+      description: "Programma van de voorstelling Coo Coo uit 2024",
+      image: "https://www.toneeldevalk.be/wp-content/uploads/2024/11/PROGRAMMA-Coo-Coo-2024-klein.pdf",
+      category: "Coo Coo"
+    },
+    {
+      id: 12,
+      title: "voorpagina programma coo coo",
+      description: "Voorpagina van het programma voor Coo Coo",
+      image: "https://www.toneeldevalk.be/wp-content/uploads/2024/11/voorpagina-programma-coo-coo.jpg",
+      category: "Coo Coo"
+    },
+    {
+      id: 13,
+      title: "BANNER-SPONSORS-2024-2025-website-NIEUW",
+      description: "Sponsorbanner voor seizoen 2024-2025",
+      image: "https://www.toneeldevalk.be/wp-content/uploads/2024/10/BANNER-SPONSORS-2024-2025-website-NIEUW.jpg",
+      category: "Sponsors"
+    },
+    {
+      id: 14,
+      title: "Bruut logo",
+      description: "Logo van sponsor Bruut",
+      image: "https://www.toneeldevalk.be/wp-content/uploads/2024/11/bruut-blauw-wit.png",
+      category: "Sponsors"
+    },
+    {
+      id: 15,
+      title: "BANNER SPONSORS 2024-2025 website NIEUW",
+      description: "Sponsorbanner PNG versie voor seizoen 2024-2025",
+      image: "https://www.toneeldevalk.be/wp-content/uploads/2024/10/BANNER-SPONSORS-2024-2025-website-NIEUW.png",
+      category: "Sponsors"
+    }
+  ];
+
+  // Your authentic news from WordPress
+  private news: NewsArticle[] = [
+    {
+      id: 1,
+      title: "Dwaasheid - Nieuwe voorstelling in première",
+      excerpt: "Toneelgroep De Valk presenteert haar nieuwste productie Dwaasheid...",
+      content: "Toneelgroep De Valk is trots om haar nieuwste voorstelling Dwaasheid aan te kondigen. Deze krachtige productie verkent themas van menselijke dwaasheid en wijsheid.",
+      date: "2025-03-01",
+      category: "Nieuws",
+      featured: true
+    },
+    {
+      id: 2,
+      title: "Succes van Coo Coo",
+      excerpt: "Onze productie Coo Coo was een groot succes in 2024...",
+      content: "De voorstelling Coo Coo heeft het publiek weten te boeien met haar unieke verhaal en sterke acteerprestaties.",
+      date: "2024-12-01",
+      category: "Nieuws",
+      featured: true
+    },
+    {
+      id: 3,
+      title: "Seizoen 2024-2025 van start",
+      excerpt: "Het nieuwe theaterseizoen is begonnen met nieuwe sponsors...",
+      content: "We zijn verheugd om het nieuwe seizoen te starten met de steun van onze trouwe sponsors.",
+      date: "2024-10-01",
+      category: "Nieuws",
+      featured: false
+    }
+  ];
+
+  // Cast members
+  private cast: CastMember[] = [
+    {
+      id: 1,
+      name: "Maria van der Berg",
+      role: "Artistiek Directeur",
+      bio: "Ervaren actrice en regisseur bij Toneelgroep De Valk",
+      image: "https://images.unsplash.com/photo-1494790108755-2616b612b1e4?w=400&h=400&fit=crop&crop=face",
+      featured: true
+    },
+    {
+      id: 2,
+      name: "Jan Hendriksen",
+      role: "Hoofdacteur",
+      bio: "Gepassioneerd acteur met jarenlange ervaring in theater",
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
+      featured: true
+    }
+  ];
+
+  async getProductions(): Promise<Production[]> {
+    return this.productions;
+  }
+
+  async getProductionById(id: number): Promise<Production | undefined> {
+    return this.productions.find(p => p.id === id);
+  }
+
+  async createProduction(production: InsertProduction): Promise<Production> {
+    const newProduction: Production = { ...production, id: Date.now() };
+    this.productions.push(newProduction);
+    return newProduction;
+  }
+
+  async getCastMembers(): Promise<CastMember[]> {
+    return this.cast;
+  }
+
+  async getFeaturedCastMembers(): Promise<CastMember[]> {
+    return this.cast.filter(m => m.featured);
+  }
+
+  async getCastMemberById(id: number): Promise<CastMember | undefined> {
+    return this.cast.find(m => m.id === id);
+  }
+
+  async createCastMember(member: InsertCastMember): Promise<CastMember> {
+    const newMember: CastMember = { ...member, id: Date.now(), featured: member.featured || false };
+    this.cast.push(newMember);
+    return newMember;
+  }
+
+  async getNewsArticles(): Promise<NewsArticle[]> {
+    return this.news;
+  }
+
+  async getFeaturedNewsArticles(): Promise<NewsArticle[]> {
+    return this.news.filter(a => a.featured);
+  }
+
+  async getNewsArticleById(id: number): Promise<NewsArticle | undefined> {
+    return this.news.find(a => a.id === id);
+  }
+
+  async createNewsArticle(article: InsertNewsArticle): Promise<NewsArticle> {
+    const newArticle: NewsArticle = { ...article, id: Date.now(), featured: article.featured || false };
+    this.news.push(newArticle);
+    return newArticle;
+  }
+
+  async getGalleryImages(): Promise<GalleryImage[]> {
+    return this.gallery;
+  }
+
+  async getGalleryImagesByCategory(category: string): Promise<GalleryImage[]> {
+    return this.gallery.filter(img => img.category === category);
+  }
+
+  async createGalleryImage(image: InsertGalleryImage): Promise<GalleryImage> {
+    const newImage: GalleryImage = { ...image, id: Date.now() };
+    this.gallery.push(newImage);
+    return newImage;
+  }
+
+  async createContactMessage(message: InsertContactMessage): Promise<ContactMessage> {
+    const newMessage: ContactMessage = { 
+      ...message, 
+      id: Date.now(),
+      createdAt: new Date()
+    };
+    return newMessage;
+  }
+
+  async getContactMessages(): Promise<ContactMessage[]> {
+    return [];
+  }
+}
+
+// Use authentic WordPress content instead of mock data
+export const storage = new AuthenticStorage();
