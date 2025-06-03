@@ -176,6 +176,69 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // WordPress XML export parser
+  app.post("/api/import/wordpress-xml", async (req, res) => {
+    try {
+      const { xmlContent } = req.body;
+      
+      if (!xmlContent) {
+        return res.status(400).json({ message: "WordPress XML content is required" });
+      }
+
+      console.log("Parsing WordPress XML export...");
+      
+      const migrator = new WordPressMigrator("", "", "");
+      const parsedContent = await migrator.parseWordPressExport(xmlContent);
+      
+      // Import parsed content
+      let imported = 0;
+      
+      // Import posts as news
+      for (const post of parsedContent.posts) {
+        try {
+          await storage.createNewsArticle({
+            title: post.title || 'Untitled',
+            excerpt: post.excerpt || post.content?.substring(0, 200) + '...' || '',
+            content: post.content || '',
+            date: post.date || new Date().toISOString().split('T')[0],
+            category: 'Nieuws',
+            featured: false
+          });
+          imported++;
+        } catch (error) {
+          console.error(`Failed to import post: ${post.title}`, error);
+        }
+      }
+      
+      // Import media as gallery items
+      for (const media of parsedContent.media) {
+        try {
+          await storage.createGalleryImage({
+            title: media.title || 'Media Item',
+            description: media.description || 'Imported from WordPress',
+            image: media.url || '',
+            category: media.category || 'Producties'
+          });
+          imported++;
+        } catch (error) {
+          console.error(`Failed to import media: ${media.title}`, error);
+        }
+      }
+
+      res.json({ 
+        message: `Successfully imported ${imported} items from WordPress XML`,
+        details: {
+          posts: parsedContent.posts.length,
+          pages: parsedContent.pages.length,
+          media: parsedContent.media.length
+        }
+      });
+    } catch (error) {
+      console.error("WordPress XML import error:", error);
+      res.status(500).json({ message: "WordPress XML import failed" });
+    }
+  });
+
   app.post("/api/migrate/csv", async (req, res) => {
     try {
       const { csvContent, contentType } = req.body;
