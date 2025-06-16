@@ -141,46 +141,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Cast & Crew Spotlight */}
-      <section id="cast" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-playfair font-bold text-theatre-navy mb-4">
-              Onze Getalenteerde Cast & Crew
-            </h2>
-            <p className="text-xl text-theatre-charcoal max-w-3xl mx-auto">
-              Maak kennis met de passionevolle kunstenaars die onze voorstellingen tot leven brengen
-            </p>
-          </div>
 
-          {castLoading ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="text-center animate-pulse">
-                  <div className="w-48 h-48 rounded-full mx-auto mb-4 bg-gray-300"></div>
-                  <div className="h-6 bg-gray-300 rounded mb-1"></div>
-                  <div className="h-4 bg-gray-300 rounded mb-2"></div>
-                  <div className="h-12 bg-gray-300 rounded"></div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {featuredCast?.map((member) => (
-                <CastMember key={member.id} member={member} />
-              ))}
-            </div>
-          )}
-
-          <div className="text-center mt-12">
-            <Link href="/cast">
-              <Button variant="outline" size="lg" className="border-theatre-navy text-theatre-navy hover:bg-theatre-navy hover:text-white">
-                Ontmoet Heel Ons Team
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
 
       {/* Latest News */}
       <section id="news" className="py-20 bg-theatre-navy text-white">

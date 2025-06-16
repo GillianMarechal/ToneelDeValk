@@ -7,7 +7,8 @@ import rostekopSepiaPath from "@assets/devalk2_1750105696285.jpg";
 import logoPath from "@assets/logodevalk_1750106393368.png";
 
 export default function HeroSection() {
-  const [currentImage, setCurrentImage] = useState(0);
+  // Start with a random image immediately
+  const [currentImage, setCurrentImage] = useState(Math.floor(Math.random() * 2));
   const [taglineVisible, setTaglineVisible] = useState(true);
 
   const images = [

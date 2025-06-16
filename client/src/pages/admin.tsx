@@ -1,357 +1,503 @@
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useToast } from "@/hooks/use-toast";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/components/ui/badge";
+import { Trash2, Edit, Plus, Image, Settings, FileText, Eye } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
-import { Upload, Download, Globe, FileText, Image, Users } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
-export default function Admin() {
-  const [wpSiteUrl, setWpSiteUrl] = useState("https://www.toneeldevalk.be");
-  const [wpUsername, setWpUsername] = useState("");
-  const [wpPassword, setWpPassword] = useState("");
-  const [csvContent, setCsvContent] = useState("");
+interface NewsItem {
+  id: number;
+  title: string;
+  excerpt: string;
+  content: string;
+  date: string;
+  category: string;
+  featured: boolean;
+}
+
+interface GalleryItem {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+  category: string;
+}
+
+interface HeroImage {
+  id: number;
+  title: string;
+  imageUrl: string;
+  altText: string;
+  active: boolean;
+  sortOrder: number;
+}
+
+export default function AdminPanel() {
   const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const [activeTab, setActiveTab] = useState("news");
 
-  const wordpressMigration = useMutation({
-    mutationFn: async ({ wpSiteUrl, contentType, username, password }: { wpSiteUrl: string; contentType: string; username?: string; password?: string }) => {
-      return await apiRequest("POST", "/api/migrate/wordpress", { wpSiteUrl, contentType, username, password });
-    },
-    onSuccess: (_, { contentType }) => {
-      toast({
-        title: "Migration Successful",
-        description: `Successfully migrated ${contentType} from WordPress`,
-      });
-    },
-    onError: (error: any) => {
-      toast({
-        title: "Migration Failed",
-        description: error.message || "Failed to migrate from WordPress",
-        variant: "destructive",
-      });
-    },
+  // News management
+  const { data: newsItems = [], isLoading: newsLoading } = useQuery({
+    queryKey: ["/api/admin/news"],
   });
 
-  const csvImport = useMutation({
-    mutationFn: async ({ csvContent, contentType }: { csvContent: string; contentType: string }) => {
-      return await apiRequest("POST", "/api/migrate/csv", { csvContent, contentType });
-    },
-    onSuccess: (_, { contentType }) => {
-      toast({
-        title: "Import Successful",
-        description: `Successfully imported ${contentType} from CSV`,
-      });
-      setCsvContent("");
-    },
-    onError: (error: any) => {
-      toast({
-        title: "Import Failed",
-        description: error.message || "Failed to import from CSV",
-        variant: "destructive",
-      });
-    },
+  // Gallery management
+  const { data: galleryItems = [], isLoading: galleryLoading } = useQuery({
+    queryKey: ["/api/admin/gallery"],
   });
 
-  const handleWordPressMigration = (contentType: string) => {
-    if (!wpSiteUrl.trim()) {
-      toast({
-        title: "Error",
-        description: "Please enter your WordPress site URL",
-        variant: "destructive",
-      });
-      return;
-    }
-    wordpressMigration.mutate({ 
-      wpSiteUrl: wpSiteUrl.trim(), 
-      contentType,
-      username: wpUsername.trim() || undefined,
-      password: wpPassword.trim() || undefined
-    });
-  };
-
-  const handleCSVImport = (contentType: string) => {
-    if (!csvContent.trim()) {
-      toast({
-        title: "Error",
-        description: "Please paste your CSV content",
-        variant: "destructive",
-      });
-      return;
-    }
-    csvImport.mutate({ csvContent: csvContent.trim(), contentType });
-  };
-
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file && file.type === "text/csv") {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setCsvContent(e.target?.result as string);
-      };
-      reader.readAsText(file);
-    } else {
-      toast({
-        title: "Invalid File",
-        description: "Please upload a CSV file",
-        variant: "destructive",
-      });
-    }
-  };
+  // Hero images management
+  const { data: heroImages = [], isLoading: heroLoading } = useQuery({
+    queryKey: ["/api/admin/hero-images"],
+  });
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-playfair font-bold text-theatre-navy mb-4">
-            Content Migration Tools
-          </h1>
-          <p className="text-xl text-theatre-charcoal">
-            Import your existing content from WordPress or CSV files
-          </p>
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">De Valk Admin Panel</h1>
+          <p className="text-gray-600 mt-2">Beheer nieuws, galerij en homepage content</p>
         </div>
 
-        <Tabs defaultValue="wordpress" className="space-y-8">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="wordpress" className="flex items-center">
-              <Globe className="w-4 h-4 mr-2" />
-              WordPress Import
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="news" className="flex items-center gap-2">
+              <FileText className="h-4 w-4" />
+              Nieuws
             </TabsTrigger>
-            <TabsTrigger value="csv" className="flex items-center">
-              <FileText className="w-4 h-4 mr-2" />
-              CSV Import
+            <TabsTrigger value="gallery" className="flex items-center gap-2">
+              <Image className="h-4 w-4" />
+              Galerij
+            </TabsTrigger>
+            <TabsTrigger value="hero" className="flex items-center gap-2">
+              <Eye className="h-4 w-4" />
+              Homepage
+            </TabsTrigger>
+            <TabsTrigger value="settings" className="flex items-center gap-2">
+              <Settings className="h-4 w-4" />
+              Instellingen
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="wordpress">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Globe className="w-5 h-5 mr-2 text-theatre-red" />
-                  WordPress Migration
-                </CardTitle>
-                <CardDescription>
-                  Import content directly from your WordPress site using the REST API
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-theatre-navy mb-2">
-                      WordPress Site URL
-                    </label>
-                    <Input
-                      placeholder="https://www.toneeldevalk.be"
-                      value={wpSiteUrl}
-                      onChange={(e) => setWpSiteUrl(e.target.value)}
-                      className="max-w-md"
-                    />
-                  </div>
-                  
-                  <div className="grid grid-cols-2 gap-4 max-w-md">
-                    <div>
-                      <label className="block text-sm font-semibold text-theatre-navy mb-2">
-                        Username (Optional)
-                      </label>
-                      <Input
-                        placeholder="admin username"
-                        value={wpUsername}
-                        onChange={(e) => setWpUsername(e.target.value)}
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-semibold text-theatre-navy mb-2">
-                        Password (Optional)
-                      </label>
-                      <Input
-                        type="password"
-                        placeholder="admin password"
-                        value={wpPassword}
-                        onChange={(e) => setWpPassword(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  
-                  <p className="text-sm text-gray-500">
-                    Username and password are only needed for private content or better access to images
-                  </p>
-                </div>
-
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <Button
-                    onClick={() => handleWordPressMigration("news")}
-                    disabled={wordpressMigration.isPending}
-                    className="bg-theatre-red hover:bg-red-700 text-white"
-                  >
-                    <FileText className="w-4 h-4 mr-2" />
-                    Import Blog Posts
-                  </Button>
-
-                  <Button
-                    onClick={() => handleWordPressMigration("pages")}
-                    disabled={wordpressMigration.isPending}
-                    className="bg-theatre-gold hover:bg-yellow-600 text-theatre-navy"
-                  >
-                    <Users className="w-4 h-4 mr-2" />
-                    Import Pages
-                  </Button>
-
-                  <Button
-                    onClick={() => handleWordPressMigration("gallery")}
-                    disabled={wordpressMigration.isPending}
-                    className="bg-theatre-navy hover:bg-theatre-charcoal text-white"
-                  >
-                    <Image className="w-4 h-4 mr-2" />
-                    Import Images
-                  </Button>
-                </div>
-
-                <div className="pt-4 border-t">
-                  <Button
-                    onClick={() => handleWordPressMigration("all")}
-                    disabled={wordpressMigration.isPending}
-                    size="lg"
-                    className="w-full bg-gradient-to-r from-theatre-red to-theatre-navy hover:from-red-700 hover:to-theatre-charcoal text-white"
-                  >
-                    <Download className="w-4 h-4 mr-2" />
-                    Import Everything from WordPress
-                  </Button>
-                </div>
-
-                {wordpressMigration.isPending && (
-                  <div className="flex items-center justify-center py-4">
-                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-theatre-red mr-2"></div>
-                    <span className="text-theatre-charcoal">Migrating content...</span>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+          <TabsContent value="news" className="space-y-6">
+            <NewsManagement 
+              items={newsItems} 
+              loading={newsLoading} 
+              onRefresh={() => queryClient.invalidateQueries({ queryKey: ["/api/admin/news"] })}
+            />
           </TabsContent>
 
-          <TabsContent value="csv">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <FileText className="w-5 h-5 mr-2 text-theatre-red" />
-                  CSV Import
-                </CardTitle>
-                <CardDescription>
-                  Upload or paste CSV data to import content in bulk
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div>
-                  <label className="block text-sm font-semibold text-theatre-navy mb-2">
-                    Upload CSV File
-                  </label>
-                  <div className="flex items-center space-x-4">
-                    <input
-                      type="file"
-                      accept=".csv"
-                      onChange={handleFileUpload}
-                      className="hidden"
-                      id="csv-upload"
-                    />
-                    <label
-                      htmlFor="csv-upload"
-                      className="cursor-pointer inline-flex items-center px-4 py-2 border border-theater-navy text-theatre-navy hover:bg-theatre-navy hover:text-white rounded-lg transition-colors"
-                    >
-                      <Upload className="w-4 h-4 mr-2" />
-                      Choose File
-                    </label>
-                  </div>
-                </div>
+          <TabsContent value="gallery" className="space-y-6">
+            <GalleryManagement 
+              items={galleryItems} 
+              loading={galleryLoading}
+              onRefresh={() => queryClient.invalidateQueries({ queryKey: ["/api/admin/gallery"] })}
+            />
+          </TabsContent>
 
-                <div>
-                  <label className="block text-sm font-semibold text-theatre-navy mb-2">
-                    Or Paste CSV Content
-                  </label>
-                  <Textarea
-                    placeholder="title,excerpt,content,date,category,featured&#10;Example Article,Short description,Full content here,2024-01-01,News,false"
-                    value={csvContent}
-                    onChange={(e) => setCsvContent(e.target.value)}
-                    rows={8}
-                    className="font-mono text-sm"
-                  />
-                </div>
+          <TabsContent value="hero" className="space-y-6">
+            <HeroManagement 
+              images={heroImages} 
+              loading={heroLoading}
+              onRefresh={() => queryClient.invalidateQueries({ queryKey: ["/api/admin/hero-images"] })}
+            />
+          </TabsContent>
 
-                <div className="flex space-x-4">
-                  <Button
-                    onClick={() => handleCSVImport("news")}
-                    disabled={csvImport.isPending}
-                    className="bg-theatre-red hover:bg-red-700 text-white"
-                  >
-                    <FileText className="w-4 h-4 mr-2" />
-                    Import as News
-                  </Button>
-
-                  <Button
-                    onClick={() => handleCSVImport("productions")}
-                    disabled={csvImport.isPending}
-                    className="bg-theatre-gold hover:bg-yellow-600 text-theatre-navy"
-                  >
-                    <Users className="w-4 h-4 mr-2" />
-                    Import as Productions
-                  </Button>
-                </div>
-
-                {csvImport.isPending && (
-                  <div className="flex items-center justify-center py-4">
-                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-theatre-red mr-2"></div>
-                    <span className="text-theatre-charcoal">Importing content...</span>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+          <TabsContent value="settings" className="space-y-6">
+            <SiteSettings />
           </TabsContent>
         </Tabs>
+      </div>
+    </div>
+  );
+}
 
-        {/* Instructions */}
-        <div className="mt-12 grid md:grid-cols-2 gap-8">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">WordPress Migration Guide</CardTitle>
+// News Management Component
+function NewsManagement({ items, loading, onRefresh }: { items: NewsItem[]; loading: boolean; onRefresh: () => void }) {
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const [editingItem, setEditingItem] = useState<NewsItem | null>(null);
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+
+  const createMutation = useMutation({
+    mutationFn: async (data: Partial<NewsItem>) => {
+      return await apiRequest("/api/admin/news", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" },
+      });
+    },
+    onSuccess: () => {
+      toast({ title: "Nieuws artikel aangemaakt" });
+      onRefresh();
+      setIsCreateDialogOpen(false);
+    },
+    onError: () => {
+      toast({ title: "Fout bij aanmaken artikel", variant: "destructive" });
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, data }: { id: number; data: Partial<NewsItem> }) => {
+      return await apiRequest(`/api/admin/news/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" },
+      });
+    },
+    onSuccess: () => {
+      toast({ title: "Artikel bijgewerkt" });
+      onRefresh();
+      setEditingItem(null);
+    },
+    onError: () => {
+      toast({ title: "Fout bij bijwerken artikel", variant: "destructive" });
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: number) => {
+      return await apiRequest(`/api/admin/news/${id}`, { method: "DELETE" });
+    },
+    onSuccess: () => {
+      toast({ title: "Artikel verwijderd" });
+      onRefresh();
+    },
+    onError: () => {
+      toast({ title: "Fout bij verwijderen artikel", variant: "destructive" });
+    },
+  });
+
+  if (loading) {
+    return <div className="flex justify-center py-8">Laden...</div>;
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-semibold">Nieuws Beheer</h2>
+        <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+          <DialogTrigger asChild>
+            <Button>
+              <Plus className="h-4 w-4 mr-2" />
+              Nieuw Artikel
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-2xl">
+            <NewsForm
+              onSubmit={(data) => createMutation.mutate(data)}
+              loading={createMutation.isPending}
+            />
+          </DialogContent>
+        </Dialog>
+      </div>
+
+      <div className="grid gap-4">
+        {items.map((item) => (
+          <Card key={item.id}>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <div>
+                <CardTitle className="text-lg">{item.title}</CardTitle>
+                <CardDescription>
+                  {item.category} • {new Date(item.date).toLocaleDateString('nl-NL')}
+                </CardDescription>
+              </div>
+              <div className="flex items-center gap-2">
+                {item.featured && <Badge variant="secondary">Uitgelicht</Badge>}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setEditingItem(item)}
+                >
+                  <Edit className="h-4 w-4" />
+                </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="outline" size="sm">
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Artikel verwijderen?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Deze actie kan niet ongedaan worden gemaakt.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Annuleren</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={() => deleteMutation.mutate(item.id)}
+                      >
+                        Verwijderen
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
             </CardHeader>
-            <CardContent className="text-sm space-y-2">
-              <p><strong>Requirements:</strong></p>
-              <ul className="list-disc list-inside space-y-1 text-gray-600">
-                <li>WordPress site must be accessible online</li>
-                <li>REST API must be enabled (default in WP 4.7+)</li>
-                <li>Site should allow public access to content</li>
-              </ul>
-              <p className="mt-4"><strong>What gets imported:</strong></p>
-              <ul className="list-disc list-inside space-y-1 text-gray-600">
-                <li>Posts → News Articles</li>
-                <li>Pages/Custom Posts → Productions (if applicable)</li>
-                <li>Media → Gallery Images</li>
-              </ul>
+            <CardContent>
+              <p className="text-gray-600">{item.excerpt}</p>
             </CardContent>
           </Card>
+        ))}
+      </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">CSV Format Guide</CardTitle>
-            </CardHeader>
-            <CardContent className="text-sm space-y-2">
-              <p><strong>News Articles CSV format:</strong></p>
-              <code className="block bg-gray-100 p-2 rounded text-xs">
-                title,excerpt,content,date,category,featured
-              </code>
-              <p className="mt-4"><strong>Productions CSV format:</strong></p>
-              <code className="block bg-gray-100 p-2 rounded text-xs">
-                title,description,duration,dates,status,image,genre
-              </code>
-              <p className="mt-4 text-gray-600">
-                Export your data from WordPress or create CSV files manually with these column headers.
-              </p>
-            </CardContent>
-          </Card>
+      {editingItem && (
+        <Dialog open={!!editingItem} onOpenChange={() => setEditingItem(null)}>
+          <DialogContent className="max-w-2xl">
+            <NewsForm
+              item={editingItem}
+              onSubmit={(data) => updateMutation.mutate({ id: editingItem.id, data })}
+              loading={updateMutation.isPending}
+            />
+          </DialogContent>
+        </Dialog>
+      )}
+    </div>
+  );
+}
+
+// News Form Component
+function NewsForm({ 
+  item, 
+  onSubmit, 
+  loading 
+}: { 
+  item?: NewsItem | null; 
+  onSubmit: (data: Partial<NewsItem>) => void; 
+  loading: boolean; 
+}) {
+  const [formData, setFormData] = useState({
+    title: item?.title || "",
+    excerpt: item?.excerpt || "",
+    content: item?.content || "",
+    category: item?.category || "Nieuws",
+    featured: item?.featured || false,
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit({
+      ...formData,
+      date: item?.date || new Date().toISOString(),
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <DialogHeader>
+        <DialogTitle>{item ? "Artikel Bewerken" : "Nieuw Artikel"}</DialogTitle>
+        <DialogDescription>
+          Vul de details in voor het nieuws artikel.
+        </DialogDescription>
+      </DialogHeader>
+
+      <div className="space-y-4">
+        <div>
+          <Label htmlFor="title">Titel</Label>
+          <Input
+            id="title"
+            value={formData.title}
+            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+            required
+          />
+        </div>
+
+        <div>
+          <Label htmlFor="excerpt">Samenvatting</Label>
+          <Textarea
+            id="excerpt"
+            value={formData.excerpt}
+            onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
+            rows={3}
+            required
+          />
+        </div>
+
+        <div>
+          <Label htmlFor="content">Inhoud</Label>
+          <Textarea
+            id="content"
+            value={formData.content}
+            onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+            rows={8}
+            required
+          />
+        </div>
+
+        <div>
+          <Label htmlFor="category">Categorie</Label>
+          <Input
+            id="category"
+            value={formData.category}
+            onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+          />
+        </div>
+
+        <div className="flex items-center space-x-2">
+          <Switch
+            id="featured"
+            checked={formData.featured}
+            onCheckedChange={(checked) => setFormData({ ...formData, featured: checked })}
+          />
+          <Label htmlFor="featured">Uitgelicht artikel</Label>
         </div>
       </div>
+
+      <DialogFooter>
+        <Button type="submit" disabled={loading}>
+          {loading ? "Opslaan..." : "Opslaan"}
+        </Button>
+      </DialogFooter>
+    </form>
+  );
+}
+
+// Gallery Management Component
+function GalleryManagement({ items, loading, onRefresh }: { items: GalleryItem[]; loading: boolean; onRefresh: () => void }) {
+  // Similar structure to NewsManagement but for gallery items
+  if (loading) {
+    return <div className="flex justify-center py-8">Laden...</div>;
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-semibold">Galerij Beheer</h2>
+        <Button>
+          <Plus className="h-4 w-4 mr-2" />
+          Nieuwe Afbeelding
+        </Button>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {items.map((item) => (
+          <Card key={item.id}>
+            <CardContent className="p-4">
+              <img 
+                src={item.image} 
+                alt={item.title}
+                className="w-full h-48 object-cover rounded mb-4"
+              />
+              <h3 className="font-semibold">{item.title}</h3>
+              <p className="text-sm text-gray-600 mb-2">{item.category}</p>
+              <p className="text-sm">{item.description}</p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Hero Management Component
+function HeroManagement({ images, loading, onRefresh }: { images: HeroImage[]; loading: boolean; onRefresh: () => void }) {
+  if (loading) {
+    return <div className="flex justify-center py-8">Laden...</div>;
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-semibold">Homepage Afbeeldingen</h2>
+        <Button>
+          <Plus className="h-4 w-4 mr-2" />
+          Nieuwe Afbeelding
+        </Button>
+      </div>
+      <div className="grid gap-4">
+        {images.map((image) => (
+          <Card key={image.id}>
+            <CardContent className="p-4 flex items-center space-x-4">
+              <img 
+                src={image.imageUrl} 
+                alt={image.altText}
+                className="w-24 h-24 object-cover rounded"
+              />
+              <div className="flex-1">
+                <h3 className="font-semibold">{image.title}</h3>
+                <p className="text-sm text-gray-600">{image.altText}</p>
+                <div className="flex items-center gap-2 mt-2">
+                  {image.active && <Badge variant="default">Actief</Badge>}
+                  <span className="text-sm text-gray-500">Volgorde: {image.sortOrder}</span>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm">
+                  <Edit className="h-4 w-4" />
+                </Button>
+                <Button variant="outline" size="sm">
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Site Settings Component
+function SiteSettings() {
+  return (
+    <div className="space-y-6">
+      <h2 className="text-2xl font-semibold">Site Instellingen</h2>
+      <Card>
+        <CardHeader>
+          <CardTitle>Algemene Instellingen</CardTitle>
+          <CardDescription>
+            Beheer algemene site configuratie
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <Label>Site Titel</Label>
+            <Input defaultValue="DE VALK - Koninklijke Toneelvereniging" />
+          </div>
+          <div>
+            <Label>Tagline</Label>
+            <Input defaultValue="blijf verwonderd, de valk zal je verbazen" />
+          </div>
+          <div>
+            <Label>Contact Email</Label>
+            <Input defaultValue="info@toneeldevalk.be" />
+          </div>
+          <div>
+            <Label>Ticket URL</Label>
+            <Input defaultValue="https://www.toneeldevalk.be/tickets" />
+          </div>
+          <Button>Opslaan</Button>
+        </CardContent>
+      </Card>
     </div>
   );
 }
