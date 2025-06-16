@@ -844,4 +844,4 @@ class AuthenticStorage implements IStorage {
 }
 
 // Use authentic WordPress content instead of mock data
-export const storage = new AuthenticStorage();
+export const storage = new DatabaseStorage();
