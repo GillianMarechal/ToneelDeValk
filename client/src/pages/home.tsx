@@ -41,13 +41,22 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="animate-slide-up">
               <h2 className="text-4xl md:text-5xl font-playfair font-bold text-theatre-navy mb-6">
-                Over Toneelgroep De Valk
+                Over De Valk
               </h2>
+              <h3 className="text-2xl font-light text-theatre-gold mb-4">
+                Koninklijke Toneelvereniging
+              </h3>
               <p className="text-lg text-theatre-charcoal mb-6 leading-relaxed">
-                Sinds 1985 brengt Toneelgroep De Valk kwaliteitsvoorstellingen naar onze gemeenschap. 
+                Sinds 1985 brengt De Valk kwaliteitsvoorstellingen naar onze gemeenschap. 
+                Onze missie is eenvoudig: verwondering wekken en het publiek blijven verbazen.
                 Met passie voor verhalen en een toewijding aan artistieke excellentie, creëren we 
-                onvergetelijke theaterervaringen die het publiek raken en inspireren.
+                onvergetelijke theaterervaringen die raken en inspireren.
               </p>
+              <div className="bg-theatre-cream/50 p-6 rounded-lg mb-6">
+                <p className="text-theatre-navy font-medium text-lg italic">
+                  "Blijf verwonderd - De Valk zal je verbazen"
+                </p>
+              </div>
               <p className="text-lg text-theatre-charcoal mb-8 leading-relaxed">
                 Onze groep bestaat uit getalenteerde acteurs, regisseurs en technici die allemaal 
                 één doel delen: het brengen van meeslepend theater dat zowel vermaakt als tot 
