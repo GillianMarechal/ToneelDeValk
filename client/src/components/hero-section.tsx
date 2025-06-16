@@ -77,6 +77,13 @@ export default function HeroSection() {
         <div className="animate-fade-in-up">
           {/* Main Logo and Title */}
           <div className="mb-8">
+            {/* Logo placeholder - ready for integration */}
+            <div className="mb-6 flex justify-center">
+              <div className="w-32 h-32 md:w-40 md:h-40 bg-theatre-gold/20 rounded-full flex items-center justify-center border-2 border-theatre-gold/50">
+                <span className="text-theatre-gold text-sm font-light">Logo</span>
+              </div>
+            </div>
+            
             <h1 className="text-7xl md:text-9xl font-playfair font-bold mb-4 leading-tight">
               <span className="inline-block text-theatre-gold animate-shimmer">DE VALK</span>
             </h1>
