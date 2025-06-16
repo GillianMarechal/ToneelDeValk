@@ -116,7 +116,7 @@ export default function HeroSection() {
               <Button 
                 variant="outline" 
                 size="lg"
-                className="border-2 border-theatre-cream text-theatre-cream hover:bg-theatre-cream hover:text-theatre-navy px-8 py-4 rounded-full transition-all duration-300"
+                className="border-2 border-white text-white hover:bg-white hover:text-theatre-navy px-8 py-4 rounded-full transition-all duration-300"
               >
                 <Calendar className="mr-2 h-5 w-5" />
                 Contact
@@ -127,11 +127,11 @@ export default function HeroSection() {
           {/* Theatre Legacy Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
             <div className="animate-count-up">
-              <div className="text-3xl md:text-4xl font-bold text-theatre-gold mb-2">Sinds 1985</div>
+              <div className="text-3xl md:text-4xl font-bold text-theatre-gold mb-2">Sinds 1885</div>
               <div className="text-theatre-cream font-light">Koninklijke Traditie</div>
             </div>
             <div className="animate-count-up" style={{ animationDelay: '0.2s' }}>
-              <div className="text-3xl md:text-4xl font-bold text-theatre-gold mb-2">Dwaasheid</div>
+              <div className="text-3xl md:text-4xl font-bold text-theatre-gold mb-2">Olifantman</div>
               <div className="text-theatre-cream font-light">Huidige Productie</div>
             </div>
             <div className="animate-count-up" style={{ animationDelay: '0.4s' }}>

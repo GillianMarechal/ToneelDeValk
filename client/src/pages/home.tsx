@@ -47,7 +47,7 @@ export default function Home() {
                 Koninklijke Toneelvereniging
               </h3>
               <p className="text-lg text-theatre-charcoal mb-6 leading-relaxed">
-                Sinds 1985 brengt De Valk kwaliteitsvoorstellingen naar onze gemeenschap. 
+                Sinds 1885 brengt De Valk kwaliteitsvoorstellingen naar onze gemeenschap. 
                 Onze missie is eenvoudig: verwondering wekken en het publiek blijven verbazen.
                 Met passie voor verhalen en een toewijding aan artistieke excellentie, creëren we 
                 onvergetelijke theaterervaringen die raken en inspireren.

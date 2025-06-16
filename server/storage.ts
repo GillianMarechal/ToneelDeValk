@@ -575,11 +575,21 @@ class AuthenticStorage implements IStorage {
   private productions: Production[] = [
     {
       id: 1,
+      title: "Olifantman",
+      description: "Onze huidige voorstelling - een ontroerende productie over menselijkheid en medeleven.",
+      duration: "2 uur",
+      dates: "2025",
+      status: "current",
+      image: "https://www.toneeldevalk.be/wp-content/uploads/2025/03/‎DWAASHEID_DIGITALE-flyer-liggend.pdf",
+      genre: "Drama"
+    },
+    {
+      id: 3,
       title: "Dwaasheid",
-      description: "Onze huidige voorstelling - een krachtige productie over menselijke dwaasheid en wijsheid uit 2025.",
+      description: "Een eerdere krachtige productie over menselijke dwaasheid en wijsheid uit 2025.",
       duration: "2 uur",
       dates: "Maart - April 2025",
-      status: "current",
+      status: "past",
       image: "https://www.toneeldevalk.be/wp-content/uploads/2025/03/‎DWAASHEID_DIGITALE-flyer-liggend.pdf",
       genre: "Drama"
     },
@@ -708,9 +718,9 @@ class AuthenticStorage implements IStorage {
   private news: NewsArticle[] = [
     {
       id: 1,
-      title: "Dwaasheid - Nieuwe voorstelling in première",
-      excerpt: "Toneelgroep De Valk presenteert haar nieuwste productie Dwaasheid...",
-      content: "Toneelgroep De Valk is trots om haar nieuwste voorstelling Dwaasheid aan te kondigen. Deze krachtige productie verkent themas van menselijke dwaasheid en wijsheid.",
+      title: "Olifantman - Nieuwe voorstelling in première",
+      excerpt: "Toneelgroep De Valk presenteert haar nieuwste productie Olifantman...",
+      content: "De Valk is trots om haar nieuwste voorstelling Olifantman aan te kondigen. Deze ontroerende productie verkent themas van menselijkheid en medeleven.",
       date: "2025-03-01",
       category: "Nieuws",
       featured: true
