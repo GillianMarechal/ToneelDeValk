@@ -4,16 +4,19 @@ import {
   newsArticles,
   galleryImages,
   contactMessages,
+  heroImages,
   type Production,
   type CastMember,
   type NewsArticle,
   type GalleryImage,
   type ContactMessage,
+  type HeroImage,
   type InsertProduction,
   type InsertCastMember,
   type InsertNewsArticle,
   type InsertGalleryImage,
   type InsertContactMessage,
+  type InsertHeroImage,
 } from "@shared/schema";
 import { drizzle } from "drizzle-orm/neon-http";
 import { neon } from "@neondatabase/serverless";
@@ -48,6 +51,11 @@ export interface IStorage {
   // Contact Messages
   createContactMessage(message: InsertContactMessage): Promise<ContactMessage>;
   getContactMessages(): Promise<ContactMessage[]>;
+  
+  // Admin operations
+  updateNewsArticle(id: number, data: Partial<InsertNewsArticle>): Promise<void>;
+  deleteNewsArticle(id: number): Promise<void>;
+  getHeroImages(): Promise<HeroImage[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -296,6 +304,21 @@ export class MemStorage implements IStorage {
 
   async getContactMessages(): Promise<ContactMessage[]> {
     return Array.from(this.contactMessages.values());
+  }
+
+  async updateNewsArticle(id: number, data: Partial<InsertNewsArticle>): Promise<void> {
+    const existing = this.newsArticles.get(id);
+    if (existing) {
+      this.newsArticles.set(id, { ...existing, ...data });
+    }
+  }
+
+  async deleteNewsArticle(id: number): Promise<void> {
+    this.newsArticles.delete(id);
+  }
+
+  async getHeroImages(): Promise<HeroImage[]> {
+    return [];
   }
 }
 

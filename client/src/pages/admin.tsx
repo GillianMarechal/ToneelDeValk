@@ -502,3 +502,144 @@ function SiteSettings() {
     </div>
   );
 }
+
+// WordPress FTP Import Component
+function WordPressImport() {
+  const { toast } = useToast();
+  const [importData, setImportData] = useState({
+    wpSiteUrl: "https://www.toneeldevalk.be",
+    ftpHost: "",
+    ftpUser: "",
+    ftpPassword: "",
+    contentType: "all"
+  });
+  const [isImporting, setIsImporting] = useState(false);
+
+  const handleImport = async () => {
+    if (!importData.wpSiteUrl || !importData.ftpHost || !importData.ftpUser || !importData.ftpPassword) {
+      toast({
+        title: "Ontbrekende gegevens",
+        description: "Vul alle FTP en WordPress gegevens in",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsImporting(true);
+    try {
+      // Try WordPress API migration first
+      const response = await fetch("/api/migrate/wordpress", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          wpSiteUrl: importData.wpSiteUrl,
+          contentType: importData.contentType,
+          username: importData.ftpUser,
+          password: importData.ftpPassword
+        })
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Import geslaagd",
+          description: "WordPress content is succesvol geïmporteerd"
+        });
+      } else {
+        const error = await response.json();
+        throw new Error(error.message);
+      }
+    } catch (error) {
+      console.error("WordPress import failed:", error);
+      toast({
+        title: "Import mislukt",
+        description: "Er was een probleem bij het importeren van WordPress content",
+        variant: "destructive"
+      });
+    } finally {
+      setIsImporting(false);
+    }
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>WordPress Content Import</CardTitle>
+        <CardDescription>
+          Importeer content van je bestaande WordPress site via FTP toegang
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div>
+          <Label htmlFor="wpSiteUrl">WordPress Site URL</Label>
+          <Input
+            id="wpSiteUrl"
+            value={importData.wpSiteUrl}
+            onChange={(e) => setImportData({...importData, wpSiteUrl: e.target.value})}
+            placeholder="https://www.toneeldevalk.be"
+          />
+        </div>
+        
+        <div>
+          <Label htmlFor="ftpHost">FTP Host</Label>
+          <Input
+            id="ftpHost"
+            value={importData.ftpHost}
+            onChange={(e) => setImportData({...importData, ftpHost: e.target.value})}
+            placeholder="ftp.jouwdomain.be"
+          />
+        </div>
+        
+        <div>
+          <Label htmlFor="ftpUser">FTP Gebruikersnaam</Label>
+          <Input
+            id="ftpUser"
+            value={importData.ftpUser}
+            onChange={(e) => setImportData({...importData, ftpUser: e.target.value})}
+            placeholder="gebruikersnaam"
+          />
+        </div>
+        
+        <div>
+          <Label htmlFor="ftpPassword">FTP Wachtwoord</Label>
+          <Input
+            id="ftpPassword"
+            type="password"
+            value={importData.ftpPassword}
+            onChange={(e) => setImportData({...importData, ftpPassword: e.target.value})}
+            placeholder="wachtwoord"
+          />
+        </div>
+
+        <div>
+          <Label htmlFor="contentType">Content Type</Label>
+          <select
+            id="contentType"
+            value={importData.contentType}
+            onChange={(e) => setImportData({...importData, contentType: e.target.value})}
+            className="w-full p-2 border rounded"
+          >
+            <option value="all">Alles</option>
+            <option value="news">Alleen Nieuws</option>
+            <option value="productions">Alleen Producties</option>
+            <option value="gallery">Alleen Galerij</option>
+          </select>
+        </div>
+
+        <div className="flex gap-2">
+          <Button 
+            onClick={handleImport} 
+            disabled={isImporting}
+            className="flex-1"
+          >
+            {isImporting ? "Importeren..." : "WordPress Content Importeren"}
+          </Button>
+        </div>
+
+        <div className="text-sm text-gray-600 bg-gray-50 p-3 rounded">
+          <p><strong>Let op:</strong> Dit zal content van je WordPress site importeren via de FTP toegang en WordPress API. 
+          Zorg ervoor dat je de juiste FTP gegevens hebt en dat je WordPress site toegankelijk is.</p>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
