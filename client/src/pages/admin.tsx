@@ -150,11 +150,13 @@ function NewsManagement({ items, loading, onRefresh }: { items: NewsItem[]; load
 
   const createMutation = useMutation({
     mutationFn: async (data: Partial<NewsItem>) => {
-      return await apiRequest("/api/admin/news", {
+      const response = await fetch("/api/admin/news", {
         method: "POST",
         body: JSON.stringify(data),
         headers: { "Content-Type": "application/json" },
       });
+      if (!response.ok) throw new Error("Failed to create news article");
+      return response.json();
     },
     onSuccess: () => {
       toast({ title: "Nieuws artikel aangemaakt" });
@@ -168,11 +170,13 @@ function NewsManagement({ items, loading, onRefresh }: { items: NewsItem[]; load
 
   const updateMutation = useMutation({
     mutationFn: async ({ id, data }: { id: number; data: Partial<NewsItem> }) => {
-      return await apiRequest(`/api/admin/news/${id}`, {
+      const response = await fetch(`/api/admin/news/${id}`, {
         method: "PUT",
         body: JSON.stringify(data),
         headers: { "Content-Type": "application/json" },
       });
+      if (!response.ok) throw new Error("Failed to update news article");
+      return response.json();
     },
     onSuccess: () => {
       toast({ title: "Artikel bijgewerkt" });
@@ -186,7 +190,9 @@ function NewsManagement({ items, loading, onRefresh }: { items: NewsItem[]; load
 
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
-      return await apiRequest(`/api/admin/news/${id}`, { method: "DELETE" });
+      const response = await fetch(`/api/admin/news/${id}`, { method: "DELETE" });
+      if (!response.ok) throw new Error("Failed to delete news article");
+      return response.json();
     },
     onSuccess: () => {
       toast({ title: "Artikel verwijderd" });

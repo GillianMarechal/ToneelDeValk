@@ -395,6 +395,18 @@ class DbStorage implements IStorage {
   async getContactMessages(): Promise<ContactMessage[]> {
     return await db.select().from(contactMessages);
   }
+
+  async updateNewsArticle(id: number, data: Partial<InsertNewsArticle>): Promise<void> {
+    await db.update(newsArticles).set(data).where(eq(newsArticles.id, id));
+  }
+
+  async deleteNewsArticle(id: number): Promise<void> {
+    await db.delete(newsArticles).where(eq(newsArticles.id, id));
+  }
+
+  async getHeroImages(): Promise<HeroImage[]> {
+    return await db.select().from(heroImages).orderBy(heroImages.sortOrder);
+  }
 }
 
 // WordPress Live Integration Storage
@@ -578,6 +590,18 @@ class WordPressStorage implements IStorage {
   }
 
   async getContactMessages(): Promise<ContactMessage[]> {
+    return [];
+  }
+
+  async updateNewsArticle(id: number, data: Partial<InsertNewsArticle>): Promise<void> {
+    // WordPress API update implementation would go here
+  }
+
+  async deleteNewsArticle(id: number): Promise<void> {
+    // WordPress API delete implementation would go here
+  }
+
+  async getHeroImages(): Promise<HeroImage[]> {
     return [];
   }
 
@@ -863,6 +887,38 @@ class AuthenticStorage implements IStorage {
 
   async getContactMessages(): Promise<ContactMessage[]> {
     return [];
+  }
+
+  async updateNewsArticle(id: number, data: Partial<InsertNewsArticle>): Promise<void> {
+    const index = this.news.findIndex(article => article.id === id);
+    if (index !== -1) {
+      this.news[index] = { ...this.news[index], ...data };
+    }
+  }
+
+  async deleteNewsArticle(id: number): Promise<void> {
+    this.news = this.news.filter(article => article.id !== id);
+  }
+
+  async getHeroImages(): Promise<HeroImage[]> {
+    return [
+      {
+        id: 1,
+        title: "Arme Cyrano",
+        imageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800",
+        altText: "Historische voorstelling Arme Cyrano",
+        active: true,
+        sortOrder: 1
+      },
+      {
+        id: 2,
+        title: "Rostekop",
+        imageUrl: "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800",
+        altText: "Klassieke voorstelling Rostekop",
+        active: false,
+        sortOrder: 2
+      }
+    ];
   }
 }
 
