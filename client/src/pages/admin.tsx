@@ -133,6 +133,7 @@ export default function AdminPanel() {
 
           <TabsContent value="settings" className="space-y-6">
             <SiteSettings />
+            <WordPressImport />
           </TabsContent>
         </Tabs>
       </div>
