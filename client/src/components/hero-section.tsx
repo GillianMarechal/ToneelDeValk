@@ -4,7 +4,7 @@ import { Link } from "wouter";
 import { useState, useEffect } from "react";
 import cyranoBluePath from "@assets/DeValk1_1750105696284.jpg";
 import rostekopSepiaPath from "@assets/devalk2_1750105696285.jpg";
-import logoPath from "@assets/logodevalk_1750106245643.png";
+import logoPath from "@assets/logodevalk_1750106393368.png";
 
 export default function HeroSection() {
   const [currentImage, setCurrentImage] = useState(0);

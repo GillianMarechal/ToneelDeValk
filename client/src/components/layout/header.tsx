@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import logoPath from "@assets/logodevalk_1750106393368.png";
 
 export default function Header() {
   const [location] = useLocation();
@@ -46,9 +47,16 @@ export default function Header() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/">
-              <h1 className="text-2xl font-playfair font-bold text-theatre-navy hover:text-theatre-red transition-colors cursor-pointer">
-                De Valk
-              </h1>
+              <div className="flex items-center space-x-3 cursor-pointer group">
+                <h1 className="text-2xl font-playfair font-bold text-theatre-navy group-hover:text-theatre-red transition-colors">
+                  DE VALK
+                </h1>
+                <img 
+                  src={logoPath} 
+                  alt="De Valk Logo" 
+                  className="w-8 h-8 object-contain filter brightness-0 group-hover:brightness-100 transition-all duration-300"
+                />
+              </div>
             </Link>
           </div>
           
