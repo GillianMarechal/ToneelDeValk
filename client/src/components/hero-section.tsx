@@ -4,6 +4,7 @@ import { Link } from "wouter";
 import { useState, useEffect } from "react";
 import cyranoBluePath from "@assets/DeValk1_1750105696284.jpg";
 import rostekopSepiaPath from "@assets/devalk2_1750105696285.jpg";
+import logoPath from "@assets/logodevalk_1750106245643.png";
 
 export default function HeroSection() {
   const [currentImage, setCurrentImage] = useState(0);
@@ -77,11 +78,13 @@ export default function HeroSection() {
         <div className="animate-fade-in-up">
           {/* Main Logo and Title */}
           <div className="mb-8">
-            {/* Logo placeholder - ready for integration */}
+            {/* De Valk Logo */}
             <div className="mb-6 flex justify-center">
-              <div className="w-32 h-32 md:w-40 md:h-40 bg-theatre-gold/20 rounded-full flex items-center justify-center border-2 border-theatre-gold/50">
-                <span className="text-theatre-gold text-sm font-light">Logo</span>
-              </div>
+              <img 
+                src={logoPath} 
+                alt="De Valk Logo" 
+                className="w-32 h-32 md:w-40 md:h-40 object-contain filter drop-shadow-2xl"
+              />
             </div>
             
             <h1 className="text-7xl md:text-9xl font-playfair font-bold mb-4 leading-tight">
