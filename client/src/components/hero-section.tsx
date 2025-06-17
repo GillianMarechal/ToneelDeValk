@@ -156,12 +156,7 @@ export default function HeroSection() {
         {images[currentImage].title}
       </div>
 
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <div className="w-6 h-10 border-2 border-theatre-cream rounded-full flex justify-center">
-          <div className="w-1 h-3 bg-theatre-cream rounded-full mt-2 animate-scroll"></div>
-        </div>
-      </div>
+
     </section>
   );
 }
