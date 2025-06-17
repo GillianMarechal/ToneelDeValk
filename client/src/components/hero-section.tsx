@@ -116,21 +116,16 @@ export default function HeroSection() {
               </Button>
             </Link>
             
-            <a 
-              href="https://www.toneeldevalk.be/tickets" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="inline-block"
-            >
+            <Link href="/contact">
               <Button 
                 variant="outline" 
                 size="lg"
                 className="bg-[#ffbe008a] border-2 border-white text-white hover:bg-white hover:text-theatre-navy px-8 py-4 rounded-full transition-all duration-300"
               >
                 <Calendar className="mr-2 h-5 w-5" />
-                Tickets Kopen
+                Neem Contact Op
               </Button>
-            </a>
+            </Link>
           </div>
 
           {/* Theatre Legacy Stats */}

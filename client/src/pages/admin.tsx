@@ -496,11 +496,11 @@ function SiteSettings() {
           </div>
           <div>
             <Label>Contact Email</Label>
-            <Input defaultValue="info@toneeldevalk.be" />
+            <Input defaultValue="info@toneelgroepdevalk.nl" />
           </div>
           <div>
-            <Label>Ticket URL</Label>
-            <Input defaultValue="https://www.toneeldevalk.be/tickets" />
+            <Label>Contact Pagina</Label>
+            <Input defaultValue="/contact" />
           </div>
           <Button>Opslaan</Button>
         </CardContent>

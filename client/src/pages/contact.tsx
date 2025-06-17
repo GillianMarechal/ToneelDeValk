@@ -83,11 +83,11 @@ export default function Contact() {
                   <Clock className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="font-playfair font-bold text-lg text-theatre-navy mb-2">Openingstijden Kassa</h3>
+                  <h3 className="font-playfair font-bold text-lg text-theatre-navy mb-2">Contacttijden</h3>
                   <p className="text-theatre-charcoal">
-                    Maandag - Vrijdag: 19:00 - 21:00<br />
-                    Weekend: 1 uur voor voorstelling<br />
-                    <span className="text-sm text-gray-500">Of op afspraak</span>
+                    Mail ons voor afspraken<br />
+                    en informatie over<br />
+                    <span className="text-sm text-gray-500">repetities en voorstellingen</span>
                   </p>
                 </div>
               </div>
