@@ -3,24 +3,24 @@ import { Mail } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-50 py-12">
+    <footer className="bg-theatre-navy py-12">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-2 gap-8">
           {/* Company Info */}
           <div>
-            <h3 className="text-lg font-light mb-4 text-gray-900">De Valk</h3>
-            <p className="text-gray-600 mb-6 max-w-md">
+            <h3 className="text-lg font-playfair font-light mb-4 text-theatre-cream">De Valk</h3>
+            <p className="text-theatre-cream/80 mb-6 max-w-md">
               Koninklijke Toneelvereniging sinds 1885. Wij brengen kwaliteitstheater naar onze gemeenschap.
             </p>
           </div>
 
           {/* Contact */}
           <div>
-            <h4 className="text-lg font-light mb-4 text-gray-900">Contact</h4>
+            <h4 className="text-lg font-playfair font-light mb-4 text-theatre-cream">Contact</h4>
             <div className="space-y-2">
               <div className="flex items-center space-x-2">
-                <Mail className="w-4 h-4 text-gray-500" />
-                <a href="mailto:info@toneeldevalk.be" className="text-gray-600 hover:text-gray-900 transition-colors">
+                <Mail className="w-4 h-4 text-theatre-gold" />
+                <a href="mailto:info@toneeldevalk.be" className="text-theatre-cream/80 hover:text-theatre-gold transition-colors">
                   info@toneeldevalk.be
                 </a>
               </div>
@@ -28,8 +28,8 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-gray-200 mt-8 pt-8 text-center">
-          <p className="text-sm text-gray-500">
+        <div className="border-t border-theatre-cream/20 mt-8 pt-8 text-center">
+          <p className="text-sm text-theatre-cream/60">
             &copy; 2024 De Valk. Alle rechten voorbehouden.
           </p>
         </div>
