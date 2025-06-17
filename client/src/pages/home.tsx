@@ -69,7 +69,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-3 gap-8">
             <Link href="/productions">
-              <div className="group cursor-pointer bg-white p-8 hover:bg-gray-900 transition-colors duration-300">
+              <a className="group cursor-pointer bg-white p-8 hover:bg-gray-900 transition-colors duration-300 block">
                 <h3 className="text-xl font-light mb-3 text-gray-900 group-hover:text-white">
                   Voorstellingen
                 </h3>
@@ -77,11 +77,11 @@ export default function Home() {
                   Bekijk ons repertoire en komende producties
                 </p>
                 <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-white" />
-              </div>
+              </a>
             </Link>
 
             <Link href="/about">
-              <div className="group cursor-pointer bg-white p-8 hover:bg-gray-900 transition-colors duration-300">
+              <a className="group cursor-pointer bg-white p-8 hover:bg-gray-900 transition-colors duration-300 block">
                 <h3 className="text-xl font-light mb-3 text-gray-900 group-hover:text-white">
                   Over ons
                 </h3>
@@ -89,11 +89,11 @@ export default function Home() {
                   Ontdek onze geschiedenis sinds 1885
                 </p>
                 <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-white" />
-              </div>
+              </a>
             </Link>
 
             <Link href="/contact">
-              <div className="group cursor-pointer bg-white p-8 hover:bg-gray-900 transition-colors duration-300">
+              <a className="group cursor-pointer bg-white p-8 hover:bg-gray-900 transition-colors duration-300 block">
                 <h3 className="text-xl font-light mb-3 text-gray-900 group-hover:text-white">
                   Contact
                 </h3>
@@ -101,7 +101,7 @@ export default function Home() {
                   Neem contact met ons op
                 </p>
                 <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-white" />
-              </div>
+              </a>
             </Link>
           </div>
         </div>
@@ -118,7 +118,7 @@ export default function Home() {
             </div>
 
             <div className="space-y-8">
-              {featuredNews.slice(0, 3).map((article) => (
+              {featuredNews.slice(0, 3).map((article: NewsArticle) => (
                 <article key={article.id} className="border-b border-gray-200 pb-8 last:border-b-0">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
@@ -140,10 +140,12 @@ export default function Home() {
 
             <div className="text-center mt-12">
               <Link href="/news">
-                <Button variant="outline" className="border-gray-300 text-gray-700 hover:bg-gray-50 rounded-none">
-                  Meer nieuws
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+                <a>
+                  <Button variant="outline" className="border-gray-300 text-gray-700 hover:bg-gray-50 rounded-none">
+                    Meer nieuws
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </a>
               </Link>
             </div>
           </div>
