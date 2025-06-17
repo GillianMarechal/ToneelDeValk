@@ -1,61 +1,59 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Crimson+Text:ital,wght@0,400;1,400&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  /* Theatre-inspired colors with minimal palette */
   --background: 0 0% 100%;
-  --foreground: 210 30% 15%; /* theatre-navy */
-  --muted: 45 30% 95%; /* theatre-cream */
-  --muted-foreground: 210 15% 25%; /* theatre-charcoal */
+  --foreground: 210 11% 15%; /* #1a2332 theatre-navy equivalent */
+  --muted: 60 4.8% 95.9%;
+  --muted-foreground: 25 5.3% 44.7%;
   --popover: 0 0% 100%;
-  --popover-foreground: 210 30% 15%;
+  --popover-foreground: 210 11% 15%;
   --card: 0 0% 100%;
-  --card-foreground: 210 30% 15%;
-  --border: 210 20% 90%;
-  --input: 210 20% 90%;
-  --primary: 210 30% 15%; /* theatre-navy */
-  --primary-foreground: 45 30% 95%; /* theatre-cream */
-  --secondary: 45 30% 95%; /* theatre-cream */
-  --secondary-foreground: 210 30% 15%;
-  --accent: 45 100% 60%; /* theatre-gold */
-  --accent-foreground: 210 30% 15%;
-  --destructive: 0 70% 50%; /* theatre-red */
-  --destructive-foreground: 45 30% 95%;
-  --ring: 210 30% 15%;
+  --card-foreground: 210 11% 15%;
+  --border: 20 5.9% 90%;
+  --input: 20 5.9% 90%;
+  --primary: 207 90% 54%;
+  --primary-foreground: 211 100% 99%;
+  --secondary: 60 4.8% 95.9%;
+  --secondary-foreground: 24 9.8% 10%;
+  --accent: 60 4.8% 95.9%;
+  --accent-foreground: 24 9.8% 10%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 60 9.1% 97.8%;
+  --ring: 20 14.3% 4.1%;
   --radius: 0.5rem;
   
-  /* Theatre color variables */
-  --theatre-navy: 210 30% 15%;
-  --theatre-charcoal: 210 15% 25%;
-  --theatre-cream: 45 30% 95%;
-  --theatre-gold: 45 100% 60%;
-  --theatre-red: 0 70% 50%;
+  /* Theatre-specific colors */
+  --theatre-navy: 210 31% 15%; /* #1a2332 */
+  --theatre-gold: 48 84% 52%; /* #d4af37 */
+  --theatre-red: 348 70% 44%; /* #c41e3a */
+  --theatre-charcoal: 0 0% 20%; /* #333333 */
 }
 
 .dark {
-  --background: 0 0% 9%;
+  --background: 240 10% 3.9%;
   --foreground: 0 0% 98%;
-  --muted: 0 0% 15%;
-  --muted-foreground: 0 0% 64%;
-  --popover: 0 0% 9%;
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
+  --popover: 240 10% 3.9%;
   --popover-foreground: 0 0% 98%;
-  --card: 0 0% 9%;
+  --card: 240 10% 3.9%;
   --card-foreground: 0 0% 98%;
-  --border: 0 0% 15%;
-  --input: 0 0% 15%;
-  --primary: 0 0% 98%;
-  --primary-foreground: 0 0% 9%;
-  --secondary: 0 0% 15%;
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
+  --primary: 207 90% 54%;
+  --primary-foreground: 211 100% 99%;
+  --secondary: 240 3.7% 15.9%;
   --secondary-foreground: 0 0% 98%;
-  --accent: 0 0% 15%;
+  --accent: 240 3.7% 15.9%;
   --accent-foreground: 0 0% 98%;
-  --destructive: 0 62% 30%;
+  --destructive: 0 62.8% 30.6%;
   --destructive-foreground: 0 0% 98%;
-  --ring: 0 0% 83%;
-  --radius: 0rem;
+  --ring: 240 4.9% 83.9%;
+  --radius: 0.5rem;
 }
 
 @layer base {
@@ -65,11 +63,10 @@
 
   body {
     @apply font-inter antialiased bg-background text-foreground;
-    letter-spacing: -0.01em;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-playfair font-light tracking-tight;
+    @apply font-playfair;
   }
 }
 
@@ -82,16 +79,12 @@
     font-family: 'Inter', sans-serif;
   }
   
+  .font-crimson {
+    font-family: 'Crimson Text', serif;
+  }
+  
   .text-theatre-navy {
     color: hsl(var(--theatre-navy));
-  }
-  
-  .text-theatre-charcoal {
-    color: hsl(var(--theatre-charcoal));
-  }
-  
-  .text-theatre-cream {
-    color: hsl(var(--theatre-cream));
   }
   
   .text-theatre-gold {
@@ -102,16 +95,12 @@
     color: hsl(var(--theatre-red));
   }
   
+  .text-theatre-charcoal {
+    color: hsl(var(--theatre-charcoal));
+  }
+  
   .bg-theatre-navy {
     background-color: hsl(var(--theatre-navy));
-  }
-  
-  .bg-theatre-charcoal {
-    background-color: hsl(var(--theatre-charcoal));
-  }
-  
-  .bg-theatre-cream {
-    background-color: hsl(var(--theatre-cream));
   }
   
   .bg-theatre-gold {
@@ -122,19 +111,95 @@
     background-color: hsl(var(--theatre-red));
   }
   
+  .bg-theatre-charcoal {
+    background-color: hsl(var(--theatre-charcoal));
+  }
+  
   .border-theatre-navy {
     border-color: hsl(var(--theatre-navy));
+  }
+  
+  .border-theatre-gold {
+    border-color: hsl(var(--theatre-gold));
+  }
+  
+  .border-theatre-red {
+    border-color: hsl(var(--theatre-red));
   }
   
   .hover\:bg-theatre-navy:hover {
     background-color: hsl(var(--theatre-navy));
   }
   
-  .hover\:text-theatre-red:hover {
-    color: hsl(var(--theatre-red));
+  .hover\:bg-theatre-gold:hover {
+    background-color: hsl(var(--theatre-gold));
+  }
+  
+  .hover\:bg-theatre-red:hover {
+    background-color: hsl(var(--theatre-red));
+  }
+  
+  .hover\:text-theatre-navy:hover {
+    color: hsl(var(--theatre-navy));
   }
   
   .hover\:text-theatre-gold:hover {
     color: hsl(var(--theatre-gold));
   }
+  
+  .hover\:text-theatre-red:hover {
+    color: hsl(var(--theatre-red));
+  }
+  
+  .hero-overlay {
+    background: linear-gradient(45deg, hsl(var(--theatre-navy) / 0.8), hsl(var(--theatre-red) / 0.3));
+  }
+  
+  .card-hover {
+    transition: all 0.3s ease;
+  }
+  
+  .card-hover:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px hsl(var(--theatre-navy) / 0.15);
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-in-out;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.8s ease-out;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus styles for accessibility */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid hsl(var(--theatre-gold));
+  outline-offset: 2px;
 }
