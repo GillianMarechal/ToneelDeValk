@@ -99,15 +99,15 @@ export default function Footer() {
               <div className="flex items-start space-x-2">
                 <MapPin className="w-4 h-4 mt-1 flex-shrink-0" />
                 <p className="text-sm">
-                  Hoofdstraat 123<br />
-                  1234 AB Voorbeeldstad
+                  Voor repetitieschema en<br />
+                  contactgegevens, bel of mail ons
                 </p>
               </div>
               <div className="flex items-center space-x-2">
                 <Phone className="w-4 h-4 flex-shrink-0" />
-                <a href="tel:+31123456789" className="text-sm hover:text-theatre-gold transition-colors">
-                  +31 (0)12 345 6789
-                </a>
+                <span className="text-sm">
+                  Contacteer ons voor meer informatie
+                </span>
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="w-4 h-4 flex-shrink-0" />

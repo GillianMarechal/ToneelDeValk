@@ -1,17 +1,17 @@
 export const SITE_CONFIG = {
   name: "Toneelgroep De Valk",
-  tagline: "Waar verhalen tot leven komen op het podium",
-  description: "Een gepassioneerde lokale theatergroep die kwaliteitsvoorstellingen brengt sinds 1985",
-  founded: 1985,
+  tagline: "Blijf Verwonderd",
+  description: "Een gepassioneerde lokale theatergroep die kwaliteitsvoorstellingen brengt sinds 1885",
+  founded: 1885,
   email: "info@toneelgroepdevalk.nl",
-  phone: "+31 (0)12 345 6789",
+  phone: "Contacteer ons via email",
   address: {
-    street: "Hoofdstraat 123",
-    city: "Voorbeeldstad",
-    postal: "1234 AB",
+    street: "Neem contact op voor",
+    city: "repetitielocatie en",
+    postal: "voorstellingsdetails",
     country: "Nederland"
   },
-  venue: "Cultureel Centrum De Bron",
+  venue: "Diverse locaties",
   socialMedia: {
     facebook: "https://www.facebook.com/toneelgroepdevalk",
     instagram: "https://www.instagram.com/toneelgroepdevalk",
@@ -22,9 +22,9 @@ export const SITE_CONFIG = {
 
 export const STATS = {
   yearsActive: new Date().getFullYear() - SITE_CONFIG.founded,
-  totalProductions: 150,
-  audienceReached: 50000,
-  activeMembers: 25
+  totalProductions: 200,
+  audienceReached: 75000,
+  activeMembers: 15
 } as const;
 
 export const OPENING_HOURS = {

@@ -44,9 +44,9 @@ export default function Contact() {
                 <div>
                   <h3 className="font-playfair font-bold text-lg text-theatre-navy mb-2">Locatie</h3>
                   <p className="text-theatre-charcoal">
-                    Cultureel Centrum De Bron<br />
-                    Hoofdstraat 123<br />
-                    1234 AB Voorbeeldstad
+                    Neem contact op voor<br />
+                    repetitielocatie en<br />
+                    voorstellingsdetails
                   </p>
                 </div>
               </div>
@@ -58,9 +58,8 @@ export default function Contact() {
                 <div>
                   <h3 className="font-playfair font-bold text-lg text-theatre-navy mb-2">Telefoon</h3>
                   <p className="text-theatre-charcoal">
-                    <a href="tel:+31123456789" className="hover:text-theatre-red transition-colors">
-                      +31 (0)12 345 6789
-                    </a>
+                    Contacteer ons via email voor<br />
+                    telefonische afspraken
                   </p>
                 </div>
               </div>

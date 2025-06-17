@@ -6,7 +6,7 @@ export default function About() {
     <>
       <SEOHead 
         title="Over Ons | Toneelgroep De Valk"
-        description="Leer meer over de geschiedenis, missie en visie van Toneelgroep De Valk. Sinds 1985 brengen wij kwaliteitstheater naar onze gemeenschap."
+        description="Leer meer over de geschiedenis, missie en visie van Toneelgroep De Valk. Sinds 1885 brengen wij kwaliteitstheater naar onze gemeenschap."
         keywords="theater geschiedenis, toneelgroep missie, theater gemeenschap, De Valk over ons"
       />
 
@@ -33,7 +33,7 @@ export default function About() {
                 Ons Verhaal
               </h2>
               <p className="text-lg text-theatre-charcoal mb-6 leading-relaxed">
-                Toneelgroep De Valk werd opgericht in 1985 door een groep gepassioneerde theaterliefhebbers 
+                Toneelgroep De Valk werd opgericht in 1885 door een groep gepassioneerde theaterliefhebbers 
                 die geloofden in de transformerende kracht van live theater. Wat begon als een kleine gemeenschapsgroep 
                 is uitgegroeid tot een gerespecteerde theaterorganisatie die bekend staat om haar artistieke excellentie 
                 en toegankelijke programmering.
@@ -157,31 +157,31 @@ export default function About() {
               Onze Impact in Cijfers
             </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Meer dan drie decennia van theatermagie
+              Bijna anderhalve eeuw van theatermagie
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="text-center">
-              <div className="text-5xl font-bold text-theatre-gold mb-2">35+</div>
+              <div className="text-5xl font-bold text-theatre-gold mb-2">139+</div>
               <div className="text-lg text-gray-300 mb-2">Jaar Ervaring</div>
-              <p className="text-sm text-gray-400">Sinds onze oprichting in 1985</p>
+              <p className="text-sm text-gray-400">Sinds onze oprichting in 1885</p>
             </div>
 
             <div className="text-center">
-              <div className="text-5xl font-bold text-theatre-gold mb-2">150+</div>
+              <div className="text-5xl font-bold text-theatre-gold mb-2">200+</div>
               <div className="text-lg text-gray-300 mb-2">Producties</div>
               <p className="text-sm text-gray-400">Van klassiek tot hedendaags</p>
             </div>
 
             <div className="text-center">
-              <div className="text-5xl font-bold text-theatre-gold mb-2">50K+</div>
+              <div className="text-5xl font-bold text-theatre-gold mb-2">75K+</div>
               <div className="text-lg text-gray-300 mb-2">Bezoekers</div>
               <p className="text-sm text-gray-400">Die genoten van onze voorstellingen</p>
             </div>
 
             <div className="text-center">
-              <div className="text-5xl font-bold text-theatre-gold mb-2">25+</div>
+              <div className="text-5xl font-bold text-theatre-gold mb-2">15+</div>
               <div className="text-lg text-gray-300 mb-2">Actieve Leden</div>
               <p className="text-sm text-gray-400">Getalenteerde kunstenaars en crew</p>
             </div>
