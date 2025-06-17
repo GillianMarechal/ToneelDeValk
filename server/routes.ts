@@ -140,133 +140,131 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Migration routes
-  app.post("/api/migrate/wordpress", async (req, res) => {
+  // Admin CRUD routes for productions
+  app.post("/api/admin/productions", async (req, res) => {
     try {
-      const { wpSiteUrl, contentType, username, password } = req.body;
-      
-      if (!wpSiteUrl) {
-        return res.status(400).json({ message: "WordPress site URL is required" });
-      }
-
-      const migrator = new WordPressMigrator(wpSiteUrl, username, password);
-      
-      switch (contentType) {
-        case "news":
-          await migrator.migrateNewsArticles();
-          break;
-        case "productions":
-          await migrator.migrateProductions();
-          break;
-        case "gallery":
-          await migrator.migrateGallery();
-          break;
-        case "all":
-          await migrator.migrateEverything();
-          break;
-        case "comprehensive":
-          await migrator.migrateComprehensive();
-          break;
-        case "pages":
-          await migrator.migratePages();
-          break;
-        default:
-          return res.status(400).json({ message: "Invalid content type" });
-      }
-
-      res.json({ message: `Successfully migrated ${contentType} from WordPress` });
+      const data = insertProductionSchema.parse(req.body);
+      const production = await storage.createProduction(data);
+      res.json(production);
     } catch (error) {
-      console.error("Migration error:", error);
-      res.status(500).json({ message: "Migration failed", error: error instanceof Error ? error.message : "Unknown error" });
+      res.status(400).json({ message: "Failed to create production" });
     }
   });
 
-  // WordPress XML export parser
-  app.post("/api/import/wordpress-xml", async (req, res) => {
+  app.put("/api/admin/productions/:id", async (req, res) => {
     try {
-      const { xmlContent } = req.body;
-      
-      if (!xmlContent) {
-        return res.status(400).json({ message: "WordPress XML content is required" });
-      }
-
-      console.log("Parsing WordPress XML export...");
-      
-      const migrator = new WordPressMigrator("", "", "");
-      const parsedContent = await migrator.parseWordPressExport(xmlContent);
-      
-      // Import parsed content
-      let imported = 0;
-      
-      // Import posts as news
-      for (const post of parsedContent.posts) {
-        try {
-          await storage.createNewsArticle({
-            title: post.title || 'Untitled',
-            excerpt: post.excerpt || post.content?.substring(0, 200) + '...' || '',
-            content: post.content || '',
-            date: post.date || new Date().toISOString().split('T')[0],
-            category: 'Nieuws',
-            featured: false
-          });
-          imported++;
-        } catch (error) {
-          console.error(`Failed to import post: ${post.title}`, error);
-        }
-      }
-      
-      // Import media as gallery items
-      for (const media of parsedContent.media) {
-        try {
-          await storage.createGalleryImage({
-            title: media.title || 'Media Item',
-            description: media.description || 'Imported from WordPress',
-            image: media.url || '',
-            category: media.category || 'Producties'
-          });
-          imported++;
-        } catch (error) {
-          console.error(`Failed to import media: ${media.title}`, error);
-        }
-      }
-
-      res.json({ 
-        message: `Successfully imported ${imported} items from WordPress XML`,
-        details: {
-          posts: parsedContent.posts.length,
-          pages: parsedContent.pages.length,
-          media: parsedContent.media.length
-        }
-      });
+      const id = parseInt(req.params.id);
+      const data = insertProductionSchema.partial().parse(req.body);
+      await storage.updateProduction(id, data);
+      res.json({ message: "Production updated successfully" });
     } catch (error) {
-      console.error("WordPress XML import error:", error);
-      res.status(500).json({ message: "WordPress XML import failed" });
+      res.status(400).json({ message: "Failed to update production" });
     }
   });
 
-  app.post("/api/migrate/csv", async (req, res) => {
+  app.delete("/api/admin/productions/:id", async (req, res) => {
     try {
-      const { csvContent, contentType } = req.body;
-      
-      if (!csvContent) {
-        return res.status(400).json({ message: "CSV content is required" });
-      }
-
-      switch (contentType) {
-        case "news":
-          await CSVImporter.importNewsFromCSV(csvContent);
-          break;
-        case "productions":
-          await CSVImporter.importProductionsFromCSV(csvContent);
-          break;
-        default:
-          return res.status(400).json({ message: "Invalid content type for CSV import" });
-      }
-
-      res.json({ message: `Successfully imported ${contentType} from CSV` });
+      const id = parseInt(req.params.id);
+      await storage.deleteProduction(id);
+      res.json({ message: "Production deleted successfully" });
     } catch (error) {
-      console.error("CSV import error:", error);
-      res.status(500).json({ message: "CSV import failed", error: error instanceof Error ? error.message : "Unknown error" });
+      res.status(500).json({ message: "Failed to delete production" });
+    }
+  });
+
+  // Admin CRUD routes for news articles
+  app.post("/api/admin/news", async (req, res) => {
+    try {
+      const data = insertNewsArticleSchema.parse(req.body);
+      const article = await storage.createNewsArticle(data);
+      res.json(article);
+    } catch (error) {
+      res.status(400).json({ message: "Failed to create news article" });
+    }
+  });
+
+  app.put("/api/admin/news/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const data = insertNewsArticleSchema.partial().parse(req.body);
+      await storage.updateNewsArticle(id, data);
+      res.json({ message: "News article updated successfully" });
+    } catch (error) {
+      res.status(400).json({ message: "Failed to update news article" });
+    }
+  });
+
+  app.delete("/api/admin/news/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteNewsArticle(id);
+      res.json({ message: "News article deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete news article" });
+    }
+  });
+
+  // Admin CRUD routes for cast members
+  app.post("/api/admin/cast", async (req, res) => {
+    try {
+      const data = insertCastMemberSchema.parse(req.body);
+      const member = await storage.createCastMember(data);
+      res.json(member);
+    } catch (error) {
+      res.status(400).json({ message: "Failed to create cast member" });
+    }
+  });
+
+  app.put("/api/admin/cast/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const data = insertCastMemberSchema.partial().parse(req.body);
+      await storage.updateCastMember(id, data);
+      res.json({ message: "Cast member updated successfully" });
+    } catch (error) {
+      res.status(400).json({ message: "Failed to update cast member" });
+    }
+  });
+
+  app.delete("/api/admin/cast/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteCastMember(id);
+      res.json({ message: "Cast member deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete cast member" });
+    }
+  });
+
+  // Admin CRUD routes for gallery images
+  app.post("/api/admin/gallery", async (req, res) => {
+    try {
+      const data = insertGalleryImageSchema.parse(req.body);
+      const image = await storage.createGalleryImage(data);
+      res.json(image);
+    } catch (error) {
+      res.status(400).json({ message: "Failed to create gallery image" });
+    }
+  });
+
+  app.put("/api/admin/gallery/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const data = insertGalleryImageSchema.partial().parse(req.body);
+      await storage.updateGalleryImage(id, data);
+      res.json({ message: "Gallery image updated successfully" });
+    } catch (error) {
+      res.status(400).json({ message: "Failed to update gallery image" });
+    }
+  });
+
+  app.delete("/api/admin/gallery/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteGalleryImage(id);
+      res.json({ message: "Gallery image deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete gallery image" });
     }
   });
 

@@ -2,10 +2,13 @@
   {
     "id": 1,
     "title": "Olifantman",
-    "description": "Een ontroerende voorstelling over moed en vriendschap",
+    "description": "Een ontroerende voorstelling over moed, vriendschap en het overwinnen van je grootste angsten. Deze productie toont hoe we allemaal een beetje olifantman in ons hebben - soms groot en sterk, soms kwetsbaar en bang.",
+    "duration": "2 uur 30 min (inclusief pauze)",
+    "dates": "December 2024 - Maart 2025",
     "status": "current",
-    "genre": "Drama",
-    "duration": "2 uur 30 min",
-    "dates": "December 2024 - Maart 2025"
+    "image": "/assets/olifantman-poster.jpg",
+    "genre": "Drama/Familie",
+    "createdAt": "2024-11-01T00:00:00Z",
+    "updatedAt": "2024-12-01T00:00:00Z"
   }
 ]

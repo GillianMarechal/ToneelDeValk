@@ -1,8 +1,20 @@
 [
   {
     "id": 1,
-    "title": "Theater impressies",
-    "category": "general",
-    "description": "Sfeerbeelden van onze voorstellingen"
+    "title": "Olifantman repetities",
+    "description": "Achter de schermen bij de repetities van onze huidige productie Olifantman",
+    "image": "/assets/repetities-olifantman.jpg",
+    "category": "Backstage",
+    "createdAt": "2024-11-15T00:00:00Z",
+    "updatedAt": "2024-11-15T00:00:00Z"
+  },
+  {
+    "id": 2,
+    "title": "Première avond Olifantman",
+    "description": "Sfeerbeelden van de succesvolle première van Olifantman",
+    "image": "/assets/premiere-olifantman.jpg",
+    "category": "Producties",
+    "createdAt": "2024-12-15T00:00:00Z",
+    "updatedAt": "2024-12-15T00:00:00Z"
   }
 ]

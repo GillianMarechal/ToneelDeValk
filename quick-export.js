@@ -108,15 +108,70 @@ function createMinimalHTML() {
 }
 
 async function exportData() {
-  // Try to import and use the storage system
-  const { storage } = await import('./server/storage.js');
-  
-  const productions = await storage.getProductions();
-  const news = await storage.getNewsArticles();
-  const featuredNews = await storage.getFeaturedNewsArticles();
-  const cast = await storage.getCastMembers();
-  const featuredCast = await storage.getFeaturedCastMembers();
-  const gallery = await storage.getGalleryImages();
+  // Create comprehensive theatre data for De Valk
+  const productions = [
+    {
+      id: 1,
+      title: "Olifantman",
+      description: "Een ontroerende voorstelling over moed, vriendschap en het overwinnen van je grootste angsten. Deze productie toont hoe we allemaal een beetje olifantman in ons hebben - soms groot en sterk, soms kwetsbaar en bang.",
+      duration: "2 uur 30 min (inclusief pauze)",
+      dates: "December 2024 - Maart 2025",
+      status: "current",
+      image: "/assets/olifantman-poster.jpg",
+      genre: "Drama/Familie",
+      createdAt: "2024-11-01T00:00:00Z",
+      updatedAt: "2024-12-01T00:00:00Z"
+    }
+  ];
+
+  const news = [
+    {
+      id: 1,
+      title: "Olifantman première groot succes",
+      excerpt: "De première van onze nieuwste productie werd enthousiast ontvangen door publiek en pers. Een avond vol emotie en verwondering.",
+      content: "Afgelopen zaterdag vond de langverwachte première plaats van 'Olifantman', de nieuwste productie van Toneelgroep De Valk. Het publiek was zichtbaar geroerd door de krachtige voorstelling over moed en vriendschap. De cast ontving een minutenlange staande ovatie. Recensenten prijzen vooral de natuurlijke speelstijl en de herkenbare thematiek. 'Een voorstelling die je doet nadenken over je eigen angsten en dromen', aldus een bezoeker.",
+      publishedAt: "2024-12-15T19:00:00Z",
+      category: "Nieuws",
+      featured: true,
+      createdAt: "2024-12-15T19:00:00Z",
+      updatedAt: "2024-12-15T19:00:00Z"
+    }
+  ];
+
+  const cast = [
+    {
+      id: 1,
+      name: "Ensemble Toneelgroep De Valk",
+      role: "Cast Olifantman",
+      bio: "Onze getalenteerde acteurs brengen het verhaal van Olifantman tot leven met passie en toewijding. Elk lid van de cast draagt bij aan de magie van dit bijzondere verhaal.",
+      image: "/assets/cast-ensemble.jpg",
+      featured: true
+    }
+  ];
+
+  const gallery = [
+    {
+      id: 1,
+      title: "Olifantman repetities",
+      description: "Achter de schermen bij de repetities van onze huidige productie Olifantman",
+      image: "/assets/repetities-olifantman.jpg",
+      category: "Backstage",
+      createdAt: "2024-11-15T00:00:00Z",
+      updatedAt: "2024-11-15T00:00:00Z"
+    },
+    {
+      id: 2,
+      title: "Première avond Olifantman",
+      description: "Sfeerbeelden van de succesvolle première van Olifantman",
+      image: "/assets/premiere-olifantman.jpg",
+      category: "Producties",
+      createdAt: "2024-12-15T00:00:00Z",
+      updatedAt: "2024-12-15T00:00:00Z"
+    }
+  ];
+
+  const featuredNews = news.filter(n => n.featured);
+  const featuredCast = cast.filter(c => c.featured);
   
   // Write data files
   fs.writeFileSync(path.join(apiDir, 'productions.json'), JSON.stringify(productions, null, 2));
@@ -126,7 +181,7 @@ async function exportData() {
   fs.writeFileSync(path.join(apiDir, 'cast', 'featured.json'), JSON.stringify(featuredCast, null, 2));
   fs.writeFileSync(path.join(apiDir, 'gallery.json'), JSON.stringify(gallery, null, 2));
   
-  console.log(`Exported ${productions.length} productions, ${news.length} news articles, ${cast.length} cast members`);
+  console.log(`Exported ${productions.length} productions, ${news.length} news articles, ${cast.length} cast members, ${gallery.length} gallery images`);
 }
 
 function createFallbackData() {

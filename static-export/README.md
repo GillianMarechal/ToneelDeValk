@@ -7,4 +7,4 @@ This folder contains the static export of the theatre website.
 - For Netlify: drag folder to netlify.com/drop
 - For Vercel: run 'vercel --prod'
 
-Generated: 2025-06-17T15:27:39.985Z
+Generated: 2025-06-17T15:34:22.392Z

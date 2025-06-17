@@ -1,9 +1,10 @@
 [
   {
     "id": 1,
-    "name": "Toneelgroep De Valk",
-    "role": "Ensemble Cast",
-    "bio": "Gepassioneerde acteurs sinds 1885",
+    "name": "Ensemble Toneelgroep De Valk",
+    "role": "Cast Olifantman",
+    "bio": "Onze getalenteerde acteurs brengen het verhaal van Olifantman tot leven met passie en toewijding. Elk lid van de cast draagt bij aan de magie van dit bijzondere verhaal.",
+    "image": "/assets/cast-ensemble.jpg",
     "featured": true
   }
 ]
