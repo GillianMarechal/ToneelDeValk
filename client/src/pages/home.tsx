@@ -1,10 +1,18 @@
 import HeroSection from "@/components/hero-section";
 import SEOHead from "@/components/seo-head";
+import ShowPopup from "@/components/show-popup";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { Calendar, Users, Award } from "lucide-react";
 
 export default function Home() {
+  const currentShow = {
+    title: "Olifantman",
+    description: "Een ontroerende voorstelling over moed, vriendschap en het overwinnen van je grootste angsten. Deze productie toont hoe we allemaal een beetje olifantman in ons hebben.",
+    dates: "December 2024 - Maart 2025",
+    genre: "Drama/Familie"
+  };
+
   return (
     <>
       <SEOHead 
@@ -13,6 +21,7 @@ export default function Home() {
         keywords="theater, toneelgroep, voorstellingen, toneel, cultuur, kunst, De Valk"
       />
 
+      <ShowPopup show={currentShow} />
       <HeroSection />
 
       {/* Simplified Welcome Section */}

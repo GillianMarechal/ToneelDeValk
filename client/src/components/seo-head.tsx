@@ -19,6 +19,30 @@ export default function SEOHead({
     // Set document title
     document.title = title;
 
+    // Set favicon
+    const setFavicon = (href: string) => {
+      let favicon = document.querySelector('link[rel="icon"]') as HTMLLinkElement;
+      if (!favicon) {
+        favicon = document.createElement('link');
+        favicon.rel = 'icon';
+        favicon.type = 'image/png';
+        document.head.appendChild(favicon);
+      }
+      favicon.href = href;
+
+      // Also set apple-touch-icon
+      let appleTouchIcon = document.querySelector('link[rel="apple-touch-icon"]') as HTMLLinkElement;
+      if (!appleTouchIcon) {
+        appleTouchIcon = document.createElement('link');
+        appleTouchIcon.rel = 'apple-touch-icon';
+        document.head.appendChild(appleTouchIcon);
+      }
+      appleTouchIcon.href = href;
+    };
+
+    // Set De Valk logo as favicon
+    setFavicon('/attached_assets/logodevalk_1750106393368.png');
+
     // Helper function to set or update meta tags
     const setMetaTag = (name: string, content: string, property?: string) => {
       if (!content) return;
@@ -80,16 +104,8 @@ export default function SEOHead({
       "name": "Toneelgroep De Valk",
       "description": description,
       "url": url || window.location.href,
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Hoofdstraat 123",
-        "addressLocality": "Voorbeeldstad",
-        "postalCode": "1234 AB",
-        "addressCountry": "NL"
-      },
-      "telephone": "+31-12-345-6789",
       "email": "info@toneelgroepdevalk.nl",
-      "foundingDate": "1985",
+      "foundingDate": "1885",
       "sameAs": [
         "https://www.facebook.com/toneelgroepdevalk",
         "https://www.instagram.com/toneelgroepdevalk"
