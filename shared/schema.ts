@@ -11,6 +11,8 @@ export const productions = pgTable("productions", {
   status: text("status").notNull(), // "current", "upcoming", "past"
   image: text("image").notNull(),
   genre: text("genre").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 export const castMembers = pgTable("cast_members", {
@@ -27,9 +29,11 @@ export const newsArticles = pgTable("news_articles", {
   title: text("title").notNull(),
   excerpt: text("excerpt").notNull(),
   content: text("content").notNull(),
-  date: text("date").notNull(),
+  publishedAt: timestamp("published_at").defaultNow(),
   category: text("category").notNull(),
   featured: boolean("featured").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 export const galleryImages = pgTable("gallery_images", {
@@ -38,6 +42,8 @@ export const galleryImages = pgTable("gallery_images", {
   description: text("description").notNull(),
   image: text("image").notNull(),
   category: text("category").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 export const contactMessages = pgTable("contact_messages", {
