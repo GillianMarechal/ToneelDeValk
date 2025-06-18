@@ -1,6 +1,8 @@
 import { type Production } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, Tag } from "lucide-react";
+import { useState } from "react";
+import ProductionPopup from "./production-popup";
 
 import olifantenman_Final from "@assets/olifantenman_Final.png";
 
@@ -9,6 +11,7 @@ interface ProductionCardProps {
 }
 
 export default function ProductionCard({ production }: ProductionCardProps) {
+  const [showPopup, setShowPopup] = useState(false);
   const getStatusBadge = () => {
     switch (production.status) {
       case "current":
@@ -60,47 +63,68 @@ export default function ProductionCard({ production }: ProductionCardProps) {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg overflow-hidden card-hover group">
-      <div className="relative">
-        <img 
-          src={olifantenman_Final} 
-          alt={`Poster van ${production.title}`}
-          className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" 
-        />
-        <div className="absolute top-4 left-4">
-          {getStatusBadge()}
+    <>
+      <div 
+        className="bg-white rounded-xl shadow-lg overflow-hidden card-hover group cursor-pointer"
+        onClick={() => setShowPopup(true)}
+      >
+        <div className="relative">
+          <img 
+            src={production.image} 
+            alt={`Poster van ${production.title}`}
+            className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" 
+          />
+          <div className="absolute top-4 left-4">
+            {getStatusBadge()}
+          </div>
+          <div className="absolute top-4 right-4">
+            <span className="bg-black/50 text-white px-2 py-1 rounded text-sm flex items-center">
+              <Clock className="w-3 h-3 mr-1" />
+              {production.duration}
+            </span>
+          </div>
+          
+          {/* Click indicator overlay */}
+          <div className="absolute inset-0 bg-theatre-navy/0 group-hover:bg-theatre-navy/10 transition-all duration-300 flex items-center justify-center">
+            <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/90 rounded-full px-4 py-2">
+              <span className="text-theatre-navy font-semibold text-sm">Klik voor details</span>
+            </div>
+          </div>
         </div>
-        <div className="absolute top-4 right-4">
-          <span className="bg-black/50 text-white px-2 py-1 rounded text-sm flex items-center">
-            <Clock className="w-3 h-3 mr-1" />
-            {production.duration}
-          </span>
+        
+        <div className="p-6">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-theatre-gold font-semibold text-sm flex items-center">
+              <Tag className="w-3 h-3 mr-1" />
+              {production.genre}
+            </span>
+          </div>
+          
+          <h3 className="text-xl font-playfair font-bold text-theatre-navy mb-2 group-hover:text-theatre-red transition-colors">
+            {production.title}
+          </h3>
+          
+          <p className="text-theatre-charcoal mb-4 text-sm leading-relaxed line-clamp-3">
+            {production.description}
+          </p>
+          
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-theatre-charcoal flex items-center">
+              <Calendar className="w-3 h-3 mr-1" />
+              {production.dates}
+            </span>
+            <div onClick={(e) => e.stopPropagation()}>
+              {getActionButton()}
+            </div>
+          </div>
         </div>
       </div>
-      <div className="p-6">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-theatre-gold font-semibold text-sm flex items-center">
-            <Tag className="w-3 h-3 mr-1" />
-            {production.genre}
-          </span>
-        </div>
-        
-        <h3 className="text-xl font-playfair font-bold text-theatre-navy mb-2 group-hover:text-theatre-red transition-colors">
-          {production.title}
-        </h3>
-        
-        <p className="text-theatre-charcoal mb-4 text-sm leading-relaxed line-clamp-3">
-          {production.description}
-        </p>
-        
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-theatre-charcoal flex items-center">
-            <Calendar className="w-3 h-3 mr-1" />
-            {production.dates}
-          </span>
-          {getActionButton()}
-        </div>
-      </div>
-    </div>
+
+      <ProductionPopup 
+        production={production}
+        open={showPopup}
+        onClose={() => setShowPopup(false)}
+      />
+    </>
   );
 }
