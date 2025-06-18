@@ -18,12 +18,8 @@ import {
   type InsertContactMessage,
   type InsertHeroImage,
 } from "@shared/schema";
-import { drizzle } from "drizzle-orm/neon-http";
-import { neon } from "@neondatabase/serverless";
+import { db } from "./db";
 import { eq, desc } from "drizzle-orm";
-
-const sql = neon(process.env.DATABASE_URL!);
-const db = drizzle(sql);
 
 export interface IStorage {
   // Productions
