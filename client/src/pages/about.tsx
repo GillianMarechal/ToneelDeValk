@@ -1,6 +1,8 @@
 import SEOHead from "@/components/seo-head";
 import { Calendar, Users, Award, Heart, Star, Globe } from "lucide-react";
 
+import olifantenman from "@assets/olifantenman.png";
+
 export default function About() {
   return (
     <>
@@ -9,7 +11,6 @@ export default function About() {
         description="Leer meer over de geschiedenis, missie en visie van Toneelgroep De Valk. Sinds 1885 brengen wij kwaliteitstheater naar onze gemeenschap."
         keywords="theater geschiedenis, toneelgroep missie, theater gemeenschap, De Valk over ons"
       />
-
       {/* Hero Section */}
       <section className="relative py-32 bg-theatre-navy text-white">
         <div className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20" 
@@ -23,7 +24,6 @@ export default function About() {
           </p>
         </div>
       </section>
-
       {/* Our Story */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -52,7 +52,7 @@ export default function About() {
             
             <div className="relative">
               <img 
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400" 
+                src={olifantenman} 
                 alt="Historic theatre performance from our early years" 
                 className="rounded-xl shadow-2xl w-full h-auto" 
               />
@@ -60,7 +60,6 @@ export default function About() {
           </div>
         </div>
       </section>
-
       {/* Mission & Vision */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -99,7 +98,6 @@ export default function About() {
           </div>
         </div>
       </section>
-
       {/* Core Values */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -148,7 +146,6 @@ export default function About() {
           </div>
         </div>
       </section>
-
       {/* Statistics */}
       <section className="py-20 bg-theatre-navy text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -188,7 +185,6 @@ export default function About() {
           </div>
         </div>
       </section>
-
       {/* Join Us */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
