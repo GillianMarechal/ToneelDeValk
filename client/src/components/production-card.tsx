@@ -24,15 +24,23 @@ export default function ProductionCard({ production }: ProductionCardProps) {
     switch (production.status) {
       case "current":
         return (
-          <Button className="text-theatre-red hover:text-theatre-gold font-semibold bg-transparent p-0 h-auto">
-            Reserveer →
-          </Button>
+          <a 
+            href="https://be.ticketgang.eu/orgFrameSaleNew.php?org=204637&event=150489"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button className="text-theatre-red hover:text-theatre-gold font-semibold bg-transparent p-0 h-auto">
+              Reserveer →
+            </Button>
+          </a>
         );
       case "upcoming":
         return (
-          <Button className="text-theatre-red hover:text-theatre-gold font-semibold bg-transparent p-0 h-auto">
-            Informeer Mij →
-          </Button>
+          <a href="/contact">
+            <Button className="text-theatre-red hover:text-theatre-gold font-semibold bg-transparent p-0 h-auto">
+              Informeer Mij →
+            </Button>
+          </a>
         );
       case "past":
         return (

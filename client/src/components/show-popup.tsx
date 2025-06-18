@@ -101,7 +101,12 @@ export default function ShowPopup({ show }: ShowPopupProps) {
 
             {/* Action Buttons */}
             <div className="space-y-3">
-              <Link href="/contact" onClick={handleTicketClick}>
+              <a 
+                href="https://be.ticketgang.eu/orgFrameSaleNew.php?org=204637&event=150489"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={handleTicketClick}
+              >
                 <Button 
                   className="w-full bg-theatre-gold hover:bg-theatre-gold/90 text-theatre-navy font-semibold py-3 rounded-xl transition-all duration-300 hover:scale-105 shadow-lg"
                   size="lg"
@@ -109,7 +114,7 @@ export default function ShowPopup({ show }: ShowPopupProps) {
                   <Mail className="mr-2 h-5 w-5" />
                   Tickets Reserveren
                 </Button>
-              </Link>
+              </a>
               
               <Link href="/productions" onClick={handleTicketClick}>
                 <Button 

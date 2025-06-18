@@ -76,7 +76,7 @@ export default function Header() {
             
             {/* Buy Tickets Button */}
             <a 
-              href="https://www.toneeldevalk.be" 
+              href="https://be.ticketgang.eu/orgFrameSaleNew.php?org=204637&event=150489" 
               target="_blank" 
               rel="noopener noreferrer"
               className="inline-block ml-4"
@@ -110,7 +110,7 @@ export default function Header() {
           <div className="flex items-center space-x-2 md:hidden">
             {/* Mobile Ticket Button */}
             <a 
-              href="https://www.toneeldevalk.be" 
+              href="https://be.ticketgang.eu/orgFrameSaleNew.php?org=204637&event=150489" 
               target="_blank" 
               rel="noopener noreferrer"
               className="inline-block"
@@ -155,7 +155,7 @@ export default function Header() {
               {/* Mobile Buy Tickets Button */}
               <div className="px-3 py-2 border-t border-gray-100 mt-4 pt-4">
                 <a 
-                  href="https://www.toneeldevalk.be" 
+                  href="https://be.ticketgang.eu/orgFrameSaleNew.php?org=204637&event=150489" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   onClick={() => setIsMenuOpen(false)}
