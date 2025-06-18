@@ -15,10 +15,23 @@ export default function ProductionDetail() {
 
   // Find the specific production by slug or title
   const production = Array.isArray(productions) 
-    ? productions.find((p: any) => 
-        p.title.toLowerCase().replace(/\s+/g, '') === slug?.replace('-', '') ||
-        p.title.toLowerCase().includes(slug?.replace('-', ' ') || '')
-      )
+    ? productions.find((p: any) => {
+        if (!slug) return false;
+        
+        // Direct slug matching for "olifantenman"
+        if (slug === 'olifantenman' && p.title === 'De Olifantman') {
+          return true;
+        }
+        
+        // Convert title to slug format for comparison
+        const titleSlug = p.title.toLowerCase()
+          .replace(/\s+/g, '-')
+          .replace(/[^a-z0-9-]/g, '');
+        
+        return titleSlug === slug || 
+               p.title.toLowerCase().replace(/\s+/g, '') === slug.replace(/-/g, '') ||
+               p.title.toLowerCase().includes(slug.replace(/-/g, ' '));
+      })
     : null;
 
   if (isLoading) {
