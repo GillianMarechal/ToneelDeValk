@@ -2,6 +2,8 @@ import { type Production } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, Tag } from "lucide-react";
 
+import olifantenman_Final from "@assets/olifantenman_Final.png";
+
 interface ProductionCardProps {
   production: Production;
 }
@@ -61,7 +63,7 @@ export default function ProductionCard({ production }: ProductionCardProps) {
     <div className="bg-white rounded-xl shadow-lg overflow-hidden card-hover group">
       <div className="relative">
         <img 
-          src={production.image} 
+          src={olifantenman_Final} 
           alt={`Poster van ${production.title}`}
           className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" 
         />
@@ -75,7 +77,6 @@ export default function ProductionCard({ production }: ProductionCardProps) {
           </span>
         </div>
       </div>
-      
       <div className="p-6">
         <div className="flex items-center justify-between mb-2">
           <span className="text-theatre-gold font-semibold text-sm flex items-center">
