@@ -389,9 +389,240 @@ function NewsForm({
   );
 }
 
+// Gallery Form Component
+function GalleryForm({ 
+  item, 
+  onSubmit, 
+  loading 
+}: { 
+  item?: GalleryItem; 
+  onSubmit: (data: any) => void; 
+  loading: boolean; 
+}) {
+  const [formData, setFormData] = useState({
+    title: item?.title || "",
+    description: item?.description || "",
+    image: item?.image || "",
+    category: item?.category || "",
+  });
+
+  const availablePhotos = [
+    { path: "/attached_assets/DeValk1_1750105696284.jpg", name: "De Valk Theater Groep" },
+    { path: "/attached_assets/devalk2_1750105696285.jpg", name: "Theater Optreden" },
+    { path: "/attached_assets/olifantenman_1750242304834.png", name: "De Olifantman Poster" }
+  ];
+
+  const categories = [
+    "Voorstellingen",
+    "Groepsfoto's", 
+    "Backstage",
+    "Posters",
+    "Repetities",
+    "Events"
+  ];
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit(formData);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <DialogHeader>
+        <DialogTitle>{item ? "Afbeelding Bewerken" : "Nieuwe Afbeelding"}</DialogTitle>
+      </DialogHeader>
+
+      <div className="space-y-4">
+        <div>
+          <Label htmlFor="title">Titel</Label>
+          <Input
+            id="title"
+            value={formData.title}
+            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+            required
+          />
+        </div>
+
+        <div>
+          <Label htmlFor="description">Beschrijving</Label>
+          <Textarea
+            id="description"
+            value={formData.description}
+            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            rows={3}
+          />
+        </div>
+
+        <div>
+          <Label htmlFor="category">Categorie</Label>
+          <Input
+            id="category"
+            value={formData.category}
+            onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+            placeholder="Bijv: Voorstellingen, Groepsfoto's, Backstage..."
+            list="categories"
+          />
+          <datalist id="categories">
+            {categories.map(cat => (
+              <option key={cat} value={cat} />
+            ))}
+          </datalist>
+        </div>
+
+        <div>
+          <Label>Afbeelding</Label>
+          <div className="space-y-3">
+            <div>
+              <Label htmlFor="imageUrl">Afbeelding URL</Label>
+              <Input
+                id="imageUrl"
+                value={formData.image}
+                onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                placeholder="https://example.com/image.jpg of /attached_assets/foto.jpg"
+              />
+            </div>
+            
+            <div>
+              <Label>Of kies een bestaande foto:</Label>
+              <div className="grid grid-cols-1 gap-2 mt-2">
+                {availablePhotos.map((photo) => (
+                  <Button
+                    key={photo.path}
+                    type="button"
+                    variant="outline"
+                    className="justify-start h-auto p-3"
+                    onClick={() => setFormData({ ...formData, image: photo.path })}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <img 
+                        src={photo.path} 
+                        alt={photo.name}
+                        className="w-12 h-12 object-cover rounded"
+                      />
+                      <span>{photo.name}</span>
+                    </div>
+                  </Button>
+                ))}
+              </div>
+            </div>
+
+            {formData.image && (
+              <div>
+                <Label>Voorbeeld:</Label>
+                <img 
+                  src={formData.image} 
+                  alt="Preview"
+                  className="w-full h-48 object-cover rounded mt-2"
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <DialogFooter>
+        <Button type="submit" disabled={loading}>
+          {loading ? "Opslaan..." : "Opslaan"}
+        </Button>
+      </DialogFooter>
+    </form>
+  );
+}
+
 // Gallery Management Component
 function GalleryManagement({ items, loading, onRefresh }: { items: GalleryItem[]; loading: boolean; onRefresh: () => void }) {
-  // Similar structure to NewsManagement but for gallery items
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState<GalleryItem | null>(null);
+  const { toast } = useToast();
+
+  const createMutation = useMutation({
+    mutationFn: async (data: any) => {
+      return apiRequest("/api/gallery", {
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+    },
+    onSuccess: () => {
+      toast({ title: "Afbeelding toegevoegd" });
+      setIsCreateDialogOpen(false);
+      onRefresh();
+    },
+    onError: () => {
+      toast({ title: "Fout bij toevoegen afbeelding", variant: "destructive" });
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, data }: { id: number; data: any }) => {
+      return apiRequest(`/api/gallery/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify(data),
+      });
+    },
+    onSuccess: () => {
+      toast({ title: "Afbeelding bijgewerkt" });
+      setEditingItem(null);
+      onRefresh();
+    },
+    onError: () => {
+      toast({ title: "Fout bij bijwerken afbeelding", variant: "destructive" });
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: number) => {
+      return apiRequest(`/api/gallery/${id}`, {
+        method: "DELETE",
+      });
+    },
+    onSuccess: () => {
+      toast({ title: "Afbeelding verwijderd" });
+      onRefresh();
+    },
+    onError: () => {
+      toast({ title: "Fout bij verwijderen afbeelding", variant: "destructive" });
+    },
+  });
+
+  const addExistingPhotosMutation = useMutation({
+    mutationFn: async () => {
+      const existingPhotos = [
+        {
+          title: "De Valk Theater Groep",
+          description: "Professionele foto van onze theatergroep",
+          image: "/attached_assets/DeValk1_1750105696284.jpg",
+          category: "Groepsfoto's"
+        },
+        {
+          title: "Theater Optreden",
+          description: "Acteurs tijdens een voorstelling",
+          image: "/attached_assets/devalk2_1750105696285.jpg",
+          category: "Voorstellingen"
+        },
+        {
+          title: "De Olifantman",
+          description: "Poster van onze huidige productie De Olifantman",
+          image: "/attached_assets/olifantenman_1750242304834.png",
+          category: "Posters"
+        }
+      ];
+      
+      for (const photo of existingPhotos) {
+        await apiRequest("/api/gallery", {
+          method: "POST",
+          body: JSON.stringify(photo),
+        });
+      }
+    },
+    onSuccess: () => {
+      toast({ title: "Bestaande foto's toegevoegd aan galerij" });
+      onRefresh();
+    },
+    onError: () => {
+      toast({ title: "Fout bij toevoegen bestaande foto's", variant: "destructive" });
+    },
+  });
+
   if (loading) {
     return <div className="flex justify-center py-8">Laden...</div>;
   }
@@ -400,11 +631,32 @@ function GalleryManagement({ items, loading, onRefresh }: { items: GalleryItem[]
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-semibold">Galerij Beheer</h2>
-        <Button>
-          <Plus className="h-4 w-4 mr-2" />
-          Nieuwe Afbeelding
-        </Button>
+        <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            onClick={() => addExistingPhotosMutation.mutate()}
+            disabled={addExistingPhotosMutation.isPending}
+          >
+            <Upload className="h-4 w-4 mr-2" />
+            {addExistingPhotosMutation.isPending ? "Importeren..." : "Importeer Bestaande Foto's"}
+          </Button>
+          <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+            <DialogTrigger asChild>
+              <Button>
+                <Plus className="h-4 w-4 mr-2" />
+                Nieuwe Afbeelding
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-2xl">
+              <GalleryForm
+                onSubmit={(data) => createMutation.mutate(data)}
+                loading={createMutation.isPending}
+              />
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
+      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {items.map((item) => (
           <Card key={item.id}>
@@ -417,10 +669,54 @@ function GalleryManagement({ items, loading, onRefresh }: { items: GalleryItem[]
               <h3 className="font-semibold">{item.title}</h3>
               <p className="text-sm text-gray-600 mb-2">{item.category}</p>
               <p className="text-sm">{item.description}</p>
+              <div className="flex gap-2 mt-4">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setEditingItem(item)}
+                >
+                  <Edit className="h-4 w-4" />
+                </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="outline" size="sm">
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Afbeelding verwijderen?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Deze actie kan niet ongedaan worden gemaakt.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Annuleren</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={() => deleteMutation.mutate(item.id)}
+                      >
+                        Verwijderen
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
             </CardContent>
           </Card>
         ))}
       </div>
+
+      {editingItem && (
+        <Dialog open={!!editingItem} onOpenChange={() => setEditingItem(null)}>
+          <DialogContent className="max-w-2xl">
+            <GalleryForm
+              item={editingItem}
+              onSubmit={(data) => updateMutation.mutate({ id: editingItem.id, data })}
+              loading={updateMutation.isPending}
+            />
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }
