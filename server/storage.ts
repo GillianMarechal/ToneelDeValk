@@ -77,9 +77,21 @@ class MemStorage implements IStorage {
       image: "/attached_assets/olifantenman.png",
       createdAt: new Date(),
       updatedAt: new Date()
+    },
+    {
+      id: 2,
+      title: "Minor Swings",
+      description: "Een intieme en aangrijpende voorstelling over de complexiteit van menselijke relaties en de kleine momenten die ons leven bepalen. Een verhaal vol humor, pijn en herkenning dat het publiek diep raakt.",
+      genre: "Drama",
+      dates: "Voorjaar 2026",
+      duration: "90 min",
+      status: "upcoming",
+      image: "/attached_assets/logodevalk_1750106393368.png",
+      createdAt: new Date(),
+      updatedAt: new Date()
     }
   ];
-  private productions_counter = 2;
+  private productions_counter = 3;
 
   async getProductions(): Promise<Production[]> {
     return [...this.productions].sort((a, b) => 
