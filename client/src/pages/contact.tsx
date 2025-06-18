@@ -42,24 +42,11 @@ export default function Contact() {
                   <MapPin className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="font-playfair font-bold text-lg text-theatre-navy mb-2">Locatie</h3>
+                  <h3 className="font-playfair font-bold text-lg text-theatre-navy mb-2">Adres</h3>
                   <p className="text-theatre-charcoal">
-                    Neem contact op voor<br />
-                    repetitielocatie en<br />
-                    voorstellingsdetails
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-4">
-                <div className="bg-theatre-red text-white p-3 rounded-lg flex-shrink-0">
-                  <Phone className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-playfair font-bold text-lg text-theatre-navy mb-2">Telefoon</h3>
-                  <p className="text-theatre-charcoal">
-                    Contacteer ons via email voor<br />
-                    telefonische afspraken
+                    Pastoriestraat 276<br />
+                    8200 Brugge/Sint-Andries<br />
+                    8000 Brugge
                   </p>
                 </div>
               </div>
@@ -71,61 +58,14 @@ export default function Contact() {
                 <div>
                   <h3 className="font-playfair font-bold text-lg text-theatre-navy mb-2">Email</h3>
                   <p className="text-theatre-charcoal">
-                    <a href="mailto:info@toneelgroepdevalk.nl" className="hover:text-theatre-red transition-colors">
-                      info@toneelgroepdevalk.nl
+                    <a href="mailto:devalkbrugge@gmail.com" className="hover:text-theatre-red transition-colors">
+                      devalkbrugge@gmail.com
                     </a>
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-start space-x-4">
-                <div className="bg-theatre-red text-white p-3 rounded-lg flex-shrink-0">
-                  <Clock className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-playfair font-bold text-lg text-theatre-navy mb-2">Contacttijden</h3>
-                  <p className="text-theatre-charcoal">
-                    Mail ons voor afspraken<br />
-                    en informatie over<br />
-                    <span className="text-sm text-gray-500">repetities en voorstellingen</span>
-                  </p>
-                </div>
-              </div>
 
-              {/* Social Media */}
-              <div className="pt-8 border-t border-gray-200">
-                <h3 className="font-playfair font-bold text-lg text-theatre-navy mb-4">Volg Ons</h3>
-                <div className="flex space-x-4">
-                  <a 
-                    href="#" 
-                    className="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition-colors"
-                    aria-label="Facebook"
-                  >
-                    <Facebook className="w-5 h-5" />
-                  </a>
-                  <a 
-                    href="#" 
-                    className="bg-blue-400 text-white p-3 rounded-lg hover:bg-blue-500 transition-colors"
-                    aria-label="Twitter"
-                  >
-                    <Twitter className="w-5 h-5" />
-                  </a>
-                  <a 
-                    href="#" 
-                    className="bg-pink-600 text-white p-3 rounded-lg hover:bg-pink-700 transition-colors"
-                    aria-label="Instagram"
-                  >
-                    <Instagram className="w-5 h-5" />
-                  </a>
-                  <a 
-                    href="#" 
-                    className="bg-red-600 text-white p-3 rounded-lg hover:bg-red-700 transition-colors"
-                    aria-label="YouTube"
-                  >
-                    <Youtube className="w-5 h-5" />
-                  </a>
-                </div>
-              </div>
             </div>
 
             {/* Contact Form */}
@@ -139,10 +79,10 @@ export default function Contact() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-playfair font-bold text-theatre-navy mb-4">
-              Vind Ons
+              Locatie
             </h2>
             <p className="text-theatre-charcoal">
-              Ons theater is gevestigd in het hart van de stad, gemakkelijk bereikbaar met zowel auto als openbaar vervoer.
+              Gelegen in Sint-Andries, Brugge
             </p>
           </div>
           
@@ -150,8 +90,9 @@ export default function Contact() {
             <div className="h-96 bg-gray-300 flex items-center justify-center">
               <div className="text-center text-gray-500">
                 <MapPin className="w-16 h-16 mx-auto mb-4" />
-                <p className="text-lg">Interactieve kaart zou hier worden geladen</p>
-                <p className="text-sm">Cultureel Centrum De Bron, Hoofdstraat 123, Voorbeeldstad</p>
+                <p className="text-lg font-medium">Pastoriestraat 276</p>
+                <p className="text-base">8200 Brugge/Sint-Andries</p>
+                <p className="text-base">8000 Brugge</p>
               </div>
             </div>
           </div>

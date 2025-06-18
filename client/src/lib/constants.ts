@@ -3,20 +3,20 @@ export const SITE_CONFIG = {
   tagline: "Blijf Verwonderd",
   description: "Een gepassioneerde lokale theatergroep die kwaliteitsvoorstellingen brengt sinds 1885",
   founded: 1885,
-  email: "info@toneelgroepdevalk.nl",
-  phone: "Contacteer ons via email",
+  email: "devalkbrugge@gmail.com",
+  phone: "",
   address: {
-    street: "Neem contact op voor",
-    city: "repetitielocatie en",
-    postal: "voorstellingsdetails",
-    country: "Nederland"
+    street: "Pastoriestraat 276",
+    city: "8200 Brugge/Sint-Andries",
+    postal: "8000 Brugge",
+    country: ""
   },
-  venue: "Diverse locaties",
+  venue: "",
   socialMedia: {
-    facebook: "https://www.facebook.com/toneelgroepdevalk",
-    instagram: "https://www.instagram.com/toneelgroepdevalk",
-    twitter: "https://www.twitter.com/toneelgroepdevalk",
-    youtube: "https://www.youtube.com/toneelgroepdevalk"
+    facebook: "",
+    instagram: "",
+    twitter: "",
+    youtube: ""
   }
 } as const;
 
