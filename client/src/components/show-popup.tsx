@@ -18,31 +18,24 @@ export default function ShowPopup({ show }: ShowPopupProps) {
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
-    // Check if popup was already shown this session
-    const popupShown = sessionStorage.getItem('showPopupShown');
-    
-    if (!popupShown) {
-      // Show popup after a short delay for better UX
-      const timer = setTimeout(() => {
-        setIsVisible(true);
-        setIsAnimating(true);
-      }, 1500);
+    // Always show popup on page load for testing
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+      setIsAnimating(true);
+    }, 1000);
 
-      return () => clearTimeout(timer);
-    }
+    return () => clearTimeout(timer);
   }, []);
 
   const handleClose = () => {
     setIsAnimating(false);
     setTimeout(() => {
       setIsVisible(false);
-      // Remember that popup was shown this session
       sessionStorage.setItem('showPopupShown', 'true');
     }, 300);
   };
 
   const handleTicketClick = () => {
-    // Track ticket interest
     sessionStorage.setItem('showPopupShown', 'true');
     handleClose();
   };
@@ -50,19 +43,19 @@ export default function ShowPopup({ show }: ShowPopupProps) {
   if (!isVisible) return null;
 
   return (
-    <>
+    <div className="fixed inset-0" style={{ zIndex: 9999 }}>
       {/* Backdrop */}
       <div 
-        className={`fixed inset-0 bg-black/40 backdrop-blur-sm z-50 transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${
           isAnimating ? 'opacity-100' : 'opacity-0'
         }`}
         onClick={handleClose}
       />
       
-      {/* Modal */}
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {/* Modal Container */}
+      <div className="fixed inset-0 flex items-center justify-center p-4 pointer-events-none">
         <div 
-          className={`relative bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all duration-300 ${
+          className={`pointer-events-auto relative bg-white backdrop-blur-md rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all duration-300 border border-theatre-navy/10 ${
             isAnimating ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
           }`}
           onClick={(e) => e.stopPropagation()}
@@ -102,9 +95,7 @@ export default function ShowPopup({ show }: ShowPopupProps) {
                   <Calendar className="w-4 h-4 text-theatre-gold" />
                   <span className="text-theatre-charcoal font-medium">{show.dates}</span>
                 </div>
-                <div className="inline-block bg-theatre-navy/10 text-theatre-navy px-3 py-1 rounded-full text-xs font-medium">
-                  {show.genre}
-                </div>
+                
               </div>
             </div>
 
@@ -149,6 +140,6 @@ export default function ShowPopup({ show }: ShowPopupProps) {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
