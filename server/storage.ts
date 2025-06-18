@@ -18,7 +18,6 @@ import {
   type InsertContactMessage,
   type InsertHeroImage,
 } from "@shared/schema";
-import { db } from "./db";
 import { eq, desc } from "drizzle-orm";
 
 export interface IStorage {
@@ -64,133 +63,216 @@ export interface IStorage {
   deleteHeroImage(id: number): Promise<void>;
 }
 
-// Database Storage Implementation
-class DbStorage implements IStorage {
+// Memory Storage Implementation
+class MemStorage implements IStorage {
+  private productions: Production[] = [
+    {
+      id: 1,
+      title: "De Olifantman",
+      description: "Een ontroerend verhaal over moed, waardigheid en menselijkheid. Gebaseerd op het waargebeurde verhaal van Joseph Merrick, een man die ondanks zijn fysieke afwijkingen zijn innerlijke schoonheid behoudt. Een krachtige voorstelling over acceptatie en het vinden van je plaats in de wereld.",
+      genre: "Drama",
+      dates: "21, 22, 28 & 29 november 2025",
+      duration: "120 min",
+      status: "current",
+      image: "/attached_assets/olifantenman.png",
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }
+  ];
+  private productions_counter = 2;
+
   async getProductions(): Promise<Production[]> {
-    return await db.select().from(productions).orderBy(desc(productions.createdAt));
+    return [...this.productions].sort((a, b) => 
+      (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0)
+    );
   }
 
   async getProductionById(id: number): Promise<Production | undefined> {
-    const result = await db.select().from(productions).where(eq(productions.id, id));
-    return result[0];
+    return this.productions.find(p => p.id === id);
   }
 
   async createProduction(production: InsertProduction): Promise<Production> {
-    const result = await db.insert(productions).values(production).returning();
-    return result[0];
+    const newProduction: Production = {
+      id: this.productions_counter++,
+      ...production,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    this.productions.push(newProduction);
+    return newProduction;
   }
 
   async updateProduction(id: number, data: Partial<InsertProduction>): Promise<void> {
-    await db.update(productions).set(data).where(eq(productions.id, id));
+    const index = this.productions.findIndex(p => p.id === id);
+    if (index !== -1) {
+      this.productions[index] = { ...this.productions[index], ...data, updatedAt: new Date() };
+    }
   }
 
   async deleteProduction(id: number): Promise<void> {
-    await db.delete(productions).where(eq(productions.id, id));
+    this.productions = this.productions.filter(p => p.id !== id);
   }
 
+  private castMembers: CastMember[] = [];
+  private castMembers_counter = 1;
+
   async getCastMembers(): Promise<CastMember[]> {
-    return await db.select().from(castMembers).orderBy(castMembers.name);
+    return [...this.castMembers].sort((a, b) => a.name.localeCompare(b.name));
   }
 
   async getFeaturedCastMembers(): Promise<CastMember[]> {
-    return await db.select().from(castMembers).where(eq(castMembers.featured, true));
+    return this.castMembers.filter(member => member.featured);
   }
 
   async getCastMemberById(id: number): Promise<CastMember | undefined> {
-    const result = await db.select().from(castMembers).where(eq(castMembers.id, id));
-    return result[0];
+    return this.castMembers.find(member => member.id === id);
   }
 
   async createCastMember(member: InsertCastMember): Promise<CastMember> {
-    const result = await db.insert(castMembers).values(member).returning();
-    return result[0];
+    const newMember: CastMember = {
+      id: this.castMembers_counter++,
+      ...member,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    this.castMembers.push(newMember);
+    return newMember;
   }
 
   async updateCastMember(id: number, data: Partial<InsertCastMember>): Promise<void> {
-    await db.update(castMembers).set(data).where(eq(castMembers.id, id));
+    const index = this.castMembers.findIndex(member => member.id === id);
+    if (index !== -1) {
+      this.castMembers[index] = { ...this.castMembers[index], ...data, updatedAt: new Date() };
+    }
   }
 
   async deleteCastMember(id: number): Promise<void> {
-    await db.delete(castMembers).where(eq(castMembers.id, id));
+    this.castMembers = this.castMembers.filter(member => member.id !== id);
   }
 
+  private newsArticles: NewsArticle[] = [];
+  private newsArticles_counter = 1;
+
   async getNewsArticles(): Promise<NewsArticle[]> {
-    return await db.select().from(newsArticles).orderBy(desc(newsArticles.publishedAt));
+    return [...this.newsArticles].sort((a, b) => 
+      (b.publishedAt?.getTime() || 0) - (a.publishedAt?.getTime() || 0)
+    );
   }
 
   async getFeaturedNewsArticles(): Promise<NewsArticle[]> {
-    return await db.select().from(newsArticles).where(eq(newsArticles.featured, true)).orderBy(desc(newsArticles.publishedAt));
+    return this.newsArticles.filter(article => article.featured);
   }
 
   async getNewsArticleById(id: number): Promise<NewsArticle | undefined> {
-    const result = await db.select().from(newsArticles).where(eq(newsArticles.id, id));
-    return result[0];
+    return this.newsArticles.find(article => article.id === id);
   }
 
   async createNewsArticle(article: InsertNewsArticle): Promise<NewsArticle> {
-    const result = await db.insert(newsArticles).values(article).returning();
-    return result[0];
+    const newArticle: NewsArticle = {
+      id: this.newsArticles_counter++,
+      ...article,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    this.newsArticles.push(newArticle);
+    return newArticle;
   }
 
   async updateNewsArticle(id: number, data: Partial<InsertNewsArticle>): Promise<void> {
-    await db.update(newsArticles).set(data).where(eq(newsArticles.id, id));
+    const index = this.newsArticles.findIndex(article => article.id === id);
+    if (index !== -1) {
+      this.newsArticles[index] = { ...this.newsArticles[index], ...data, updatedAt: new Date() };
+    }
   }
 
   async deleteNewsArticle(id: number): Promise<void> {
-    await db.delete(newsArticles).where(eq(newsArticles.id, id));
+    this.newsArticles = this.newsArticles.filter(article => article.id !== id);
   }
 
+  private galleryImages: GalleryImage[] = [];
+  private galleryImages_counter = 1;
+
   async getGalleryImages(): Promise<GalleryImage[]> {
-    return await db.select().from(galleryImages).orderBy(desc(galleryImages.createdAt));
+    return [...this.galleryImages].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
 
   async getGalleryImagesByCategory(category: string): Promise<GalleryImage[]> {
-    return await db.select().from(galleryImages).where(eq(galleryImages.category, category));
+    return this.galleryImages.filter(image => image.category === category);
   }
 
   async createGalleryImage(image: InsertGalleryImage): Promise<GalleryImage> {
-    const result = await db.insert(galleryImages).values(image).returning();
-    return result[0];
+    const newImage: GalleryImage = {
+      id: this.galleryImages_counter++,
+      ...image,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    this.galleryImages.push(newImage);
+    return newImage;
   }
 
   async updateGalleryImage(id: number, data: Partial<InsertGalleryImage>): Promise<void> {
-    await db.update(galleryImages).set(data).where(eq(galleryImages.id, id));
+    const index = this.galleryImages.findIndex(image => image.id === id);
+    if (index !== -1) {
+      this.galleryImages[index] = { ...this.galleryImages[index], ...data, updatedAt: new Date() };
+    }
   }
 
   async deleteGalleryImage(id: number): Promise<void> {
-    await db.delete(galleryImages).where(eq(galleryImages.id, id));
+    this.galleryImages = this.galleryImages.filter(image => image.id !== id);
   }
 
+  private contactMessages: ContactMessage[] = [];
+  private contactMessages_counter = 1;
+
   async createContactMessage(message: InsertContactMessage): Promise<ContactMessage> {
-    const result = await db.insert(contactMessages).values(message).returning();
-    return result[0];
+    const newMessage: ContactMessage = {
+      id: this.contactMessages_counter++,
+      ...message,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    this.contactMessages.push(newMessage);
+    return newMessage;
   }
 
   async getContactMessages(): Promise<ContactMessage[]> {
-    return await db.select().from(contactMessages).orderBy(desc(contactMessages.createdAt));
+    return [...this.contactMessages].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
 
   async deleteContactMessage(id: number): Promise<void> {
-    await db.delete(contactMessages).where(eq(contactMessages.id, id));
+    this.contactMessages = this.contactMessages.filter(message => message.id !== id);
   }
 
+  private heroImages: HeroImage[] = [];
+  private heroImages_counter = 1;
+
   async getHeroImages(): Promise<HeroImage[]> {
-    return await db.select().from(heroImages).orderBy(heroImages.sortOrder);
+    return [...this.heroImages].sort((a, b) => a.sortOrder - b.sortOrder);
   }
 
   async createHeroImage(image: InsertHeroImage): Promise<HeroImage> {
-    const result = await db.insert(heroImages).values(image).returning();
-    return result[0];
+    const newImage: HeroImage = {
+      id: this.heroImages_counter++,
+      ...image,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    this.heroImages.push(newImage);
+    return newImage;
   }
 
   async updateHeroImage(id: number, data: Partial<InsertHeroImage>): Promise<void> {
-    await db.update(heroImages).set(data).where(eq(heroImages.id, id));
+    const index = this.heroImages.findIndex(image => image.id === id);
+    if (index !== -1) {
+      this.heroImages[index] = { ...this.heroImages[index], ...data, updatedAt: new Date() };
+    }
   }
 
   async deleteHeroImage(id: number): Promise<void> {
-    await db.delete(heroImages).where(eq(heroImages.id, id));
+    this.heroImages = this.heroImages.filter(image => image.id !== id);
   }
 }
 
-// Use Database Storage as primary storage
-export const storage = new DbStorage();
+// Use Memory Storage as primary storage
+export const storage = new MemStorage();
