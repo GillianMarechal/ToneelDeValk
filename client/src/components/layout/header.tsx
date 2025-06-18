@@ -63,14 +63,14 @@ export default function Header() {
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-6 xl:space-x-8">
             {navigation.map((item) => (
-              <Link 
-                key={item.name} 
-                href={item.href}
-                className={`text-theatre-charcoal hover:text-theatre-red transition-colors font-medium text-sm xl:text-base ${
-                  isActive(item.href) ? "text-theatre-red" : ""
-                }`}
-              >
-                {item.name}
+              <Link key={item.name} href={item.href}>
+                <a 
+                  className={`text-theatre-charcoal hover:text-theatre-red transition-colors font-medium text-sm xl:text-base ${
+                    isActive(item.href) ? "text-theatre-red" : ""
+                  }`}
+                >
+                  {item.name}
+                </a>
               </Link>
             ))}
             
@@ -94,14 +94,14 @@ export default function Header() {
           {/* Medium screen navigation without tickets button */}
           <div className="hidden md:flex lg:hidden items-center space-x-6">
             {navigation.map((item) => (
-              <Link 
-                key={item.name} 
-                href={item.href}
-                className={`text-theatre-charcoal hover:text-theatre-red transition-colors font-medium text-sm ${
-                  isActive(item.href) ? "text-theatre-red" : ""
-                }`}
-              >
-                {item.name}
+              <Link key={item.name} href={item.href}>
+                <a 
+                  className={`text-theatre-charcoal hover:text-theatre-red transition-colors font-medium text-sm ${
+                    isActive(item.href) ? "text-theatre-red" : ""
+                  }`}
+                >
+                  {item.name}
+                </a>
               </Link>
             ))}
           </div>
@@ -140,15 +140,15 @@ export default function Header() {
           <div className="md:hidden absolute top-16 lg:top-20 left-0 right-0 bg-white shadow-lg border-t z-50">
             <div className="px-4 py-3 space-y-1 max-h-[calc(100vh-4rem)] overflow-y-auto">
               {navigation.map((item) => (
-                <Link 
-                  key={item.name} 
-                  href={item.href}
-                  className={`block px-3 py-3 text-theatre-charcoal hover:text-theatre-red transition-colors font-medium rounded-lg hover:bg-gray-50 ${
-                    isActive(item.href) ? "text-theatre-red bg-gray-50" : ""
-                  }`}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item.name}
+                <Link key={item.name} href={item.href}>
+                  <a 
+                    className={`block px-3 py-3 text-theatre-charcoal hover:text-theatre-red transition-colors font-medium rounded-lg hover:bg-gray-50 ${
+                      isActive(item.href) ? "text-theatre-red bg-gray-50" : ""
+                    }`}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {item.name}
+                  </a>
                 </Link>
               ))}
               
