@@ -20,10 +20,9 @@ export default function Cast() {
         description="Maak kennis met het getalenteerde team van Toneelgroep De Valk. Ontmoet onze acteurs, regisseurs en crew leden die onze voorstellingen tot leven brengen."
         keywords="theater cast, acteurs, crew, theater team, regisseurs, De Valk spelers"
       />
-
       {/* Hero Section */}
       <section className="relative py-32 bg-theatre-navy text-white">
-        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20" 
+        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20 bg-[rgba(12, 12, 12, 0)]" 
              style={{backgroundImage: "url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=600')"}}></div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl md:text-7xl font-playfair font-bold mb-6 animate-fade-in">
@@ -34,7 +33,6 @@ export default function Cast() {
           </p>
         </div>
       </section>
-
       {/* Featured Cast Members */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -70,7 +68,6 @@ export default function Cast() {
           )}
         </div>
       </section>
-
       {/* All Cast Members */}
       {otherMembers.length > 0 && (
         <section className="py-20 bg-gray-50">
@@ -95,7 +92,6 @@ export default function Cast() {
           </div>
         </section>
       )}
-
       {/* Team Info */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -143,7 +139,6 @@ export default function Cast() {
           </div>
         </div>
       </section>
-
       {/* Join Our Team */}
       <section className="py-20 bg-theatre-navy text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
