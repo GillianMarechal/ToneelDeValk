@@ -25,8 +25,21 @@ export default function ShowPopup({ show }: ShowPopupProps) {
     queryKey: ["/api/productions"],
   });
 
-  // Find the current production (De Olifantman)
-  const currentProduction = productions?.find((p: any) => p.status === "current");
+  // Find the current production (De Olifantman) or create fallback
+  const currentProduction = Array.isArray(productions) 
+    ? productions.find((p: any) => p.status === "current")
+    : {
+        id: 1,
+        title: "De Olifantman",
+        description: "Een ontroerend verhaal over moed, waardigheid en menselijkheid. Gebaseerd op het waargebeurde verhaal van Joseph Merrick, een man die ondanks zijn fysieke afwijkingen zijn innerlijke schoonheid behoudt. Een krachtige voorstelling over acceptatie en het vinden van je plaats in de wereld.",
+        genre: "Drama",
+        dates: "21, 22, 28 & 29 november 2025",
+        duration: "120 min",
+        status: "current",
+        image: "/attached_assets/olifantenman.png",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
 
   useEffect(() => {
     // Always show popup on page load for testing
@@ -135,16 +148,15 @@ export default function ShowPopup({ show }: ShowPopupProps) {
                 </Button>
               </a>
               
-              <Link href="/productions" onClick={handleTicketClick}>
-                <Button 
-                  variant="outline" 
-                  className="w-full border-2 border-theatre-navy/20 text-theatre-navy hover:bg-theatre-navy hover:text-white py-3 rounded-xl transition-all duration-300"
-                  size="lg"
-                >
-                  Meer Informatie
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
+              <Button 
+                onClick={handleMoreInfo}
+                variant="outline" 
+                className="w-full border-2 border-theatre-navy/20 text-theatre-navy hover:bg-theatre-navy hover:text-white py-3 rounded-xl transition-all duration-300"
+                size="lg"
+              >
+                Meer Informatie
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
             </div>
 
             {/* Footer */}
@@ -164,6 +176,15 @@ export default function ShowPopup({ show }: ShowPopupProps) {
           </div>
         </div>
       </div>
+
+      {/* Production Details Popup */}
+      {currentProduction && (
+        <ProductionPopup 
+          production={currentProduction}
+          open={showProductionPopup}
+          onClose={() => setShowProductionPopup(false)}
+        />
+      )}
     </div>
   );
 }
