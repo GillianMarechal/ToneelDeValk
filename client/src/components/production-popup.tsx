@@ -2,6 +2,7 @@ import { type Production } from "@shared/schema";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, Tag, X, Ticket } from "lucide-react";
+import olifantenman_Final from "@assets/olifantenman_Final.png";
 
 interface ProductionPopupProps {
   production: Production | null;
@@ -50,7 +51,7 @@ export default function ProductionPopup({ production, open, onClose }: Productio
             {/* Poster Section */}
             <div className="relative bg-theatre-navy">
               <img 
-                src={production.image} 
+                src={olifantenman_Final} 
                 alt={`Poster van ${production.title}`}
                 className="w-full h-full object-cover min-h-[400px] md:min-h-[600px]"
               />
