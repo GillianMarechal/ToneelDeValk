@@ -7,9 +7,9 @@ import { Calendar, Users, Award } from "lucide-react";
 
 export default function Home() {
   const currentShow = {
-    title: "Olifantman",
+    title: "De Olifantman",
     description: "Een ontroerende voorstelling over moed, vriendschap en het overwinnen van je grootste angsten. Deze productie toont hoe we allemaal een beetje olifantman in ons hebben.",
-    dates: "December 2024 - Maart 2025",
+    dates: "21, 22, 28 en 29 november 2025 - 20 uur",
     genre: "Drama/Familie"
   };
 
@@ -32,7 +32,7 @@ export default function Home() {
           </h2>
           <p className="text-lg text-theatre-charcoal mb-8 leading-relaxed">
             Sinds 1885 brengt onze koninklijke toneelvereniging kwaliteitsvoorstellingen 
-            naar de gemeenschap. Ontdek onze huidige productie "Olifantman" en laat je verbazen 
+            naar de gemeenschap. Ontdek onze huidige productie "De Olifantman" en laat je verbazen 
             door de magie van live theater.
           </p>
           
@@ -44,8 +44,8 @@ export default function Home() {
             </div>
             <div className="text-center p-4">
               <Users className="w-8 h-8 text-theatre-gold mx-auto mb-2" />
-              <div className="font-semibold text-theatre-navy">Olifantman</div>
-              <div className="text-sm text-theatre-charcoal">Huidige Productie</div>
+              <div className="font-semibold text-theatre-navy">De Olifantman</div>
+              <div className="text-sm text-theatre-charcoal">November 2025</div>
             </div>
             <div className="text-center p-4">
               <Award className="w-8 h-8 text-theatre-gold mx-auto mb-2" />

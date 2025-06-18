@@ -112,10 +112,10 @@ async function exportData() {
   const productions = [
     {
       id: 1,
-      title: "Olifantman",
+      title: "De Olifantman",
       description: "Een ontroerende voorstelling over moed, vriendschap en het overwinnen van je grootste angsten. Deze productie toont hoe we allemaal een beetje olifantman in ons hebben - soms groot en sterk, soms kwetsbaar en bang.",
       duration: "2 uur 30 min (inclusief pauze)",
-      dates: "December 2024 - Maart 2025",
+      dates: "21, 22, 28 en 29 november 2025 - 20 uur",
       status: "current",
       image: "/assets/olifantman-poster.jpg",
       genre: "Drama/Familie",
@@ -127,14 +127,14 @@ async function exportData() {
   const news = [
     {
       id: 1,
-      title: "Olifantman première groot succes",
-      excerpt: "De première van onze nieuwste productie werd enthousiast ontvangen door publiek en pers. Een avond vol emotie en verwondering.",
-      content: "Afgelopen zaterdag vond de langverwachte première plaats van 'Olifantman', de nieuwste productie van Toneelgroep De Valk. Het publiek was zichtbaar geroerd door de krachtige voorstelling over moed en vriendschap. De cast ontving een minutenlange staande ovatie. Recensenten prijzen vooral de natuurlijke speelstijl en de herkenbare thematiek. 'Een voorstelling die je doet nadenken over je eigen angsten en dromen', aldus een bezoeker.",
-      publishedAt: "2024-12-15T19:00:00Z",
+      title: "De Olifantman komt naar Brugge",
+      excerpt: "Bernard Pomerance's aangrijpende verhaal over moed en menselijkheid speelt op 21, 22, 28 en 29 november in Ma/Z.",
+      content: "Toneelgroep De Valk presenteert 'De Olifantman' van Bernard Pomerance onder regie van Dominique Berten. Deze ontroerende voorstelling over moed, vriendschap en het overwinnen van je grootste angsten toont hoe we allemaal een beetje olifantman in ons hebben. De voorstellingen vinden plaats op 21, 22, 28 en 29 november 2025 om 20 uur in Ma/Z - Magdalenastraat 27, 8200 Brugge. Tickets zijn verkrijgbaar via www.toneeldevalk.be.",
+      publishedAt: "2025-10-15T19:00:00Z",
       category: "Nieuws",
       featured: true,
-      createdAt: "2024-12-15T19:00:00Z",
-      updatedAt: "2024-12-15T19:00:00Z"
+      createdAt: "2025-10-15T19:00:00Z",
+      updatedAt: "2025-10-15T19:00:00Z"
     }
   ];
 
@@ -152,21 +152,21 @@ async function exportData() {
   const gallery = [
     {
       id: 1,
-      title: "Olifantman repetities",
-      description: "Achter de schermen bij de repetities van onze huidige productie Olifantman",
+      title: "De Olifantman repetities",
+      description: "Achter de schermen bij de repetities van onze huidige productie De Olifantman",
       image: "/assets/repetities-olifantman.jpg",
       category: "Backstage",
-      createdAt: "2024-11-15T00:00:00Z",
-      updatedAt: "2024-11-15T00:00:00Z"
+      createdAt: "2025-10-15T00:00:00Z",
+      updatedAt: "2025-10-15T00:00:00Z"
     },
     {
       id: 2,
-      title: "Première avond Olifantman",
-      description: "Sfeerbeelden van de succesvolle première van Olifantman",
-      image: "/assets/premiere-olifantman.jpg",
+      title: "De Olifantman poster",
+      description: "Officiële poster voor De Olifantman - november 2025",
+      image: "/assets/olifantman-poster.jpg",
       category: "Producties",
-      createdAt: "2024-12-15T00:00:00Z",
-      updatedAt: "2024-12-15T00:00:00Z"
+      createdAt: "2025-10-15T00:00:00Z",
+      updatedAt: "2025-10-15T00:00:00Z"
     }
   ];
 

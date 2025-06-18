@@ -135,8 +135,8 @@ export default function HeroSection() {
               <div className="text-theatre-cream font-light">Koninklijke Traditie</div>
             </div>
             <div className="animate-count-up" style={{ animationDelay: '0.2s' }}>
-              <div className="text-3xl md:text-4xl font-bold text-theatre-gold mb-2">Olifantman</div>
-              <div className="text-theatre-cream font-light">Huidige Productie</div>
+              <div className="text-3xl md:text-4xl font-bold text-theatre-gold mb-2">De Olifantman</div>
+              <div className="text-theatre-cream font-light">November 2025</div>
             </div>
             <div className="animate-count-up" style={{ animationDelay: '0.4s' }}>
               <div className="text-3xl md:text-4xl font-bold text-theatre-gold mb-2">Verwondering</div>

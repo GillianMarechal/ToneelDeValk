@@ -1,20 +1,20 @@
 [
   {
     "id": 1,
-    "title": "Olifantman repetities",
-    "description": "Achter de schermen bij de repetities van onze huidige productie Olifantman",
+    "title": "De Olifantman repetities",
+    "description": "Achter de schermen bij de repetities van onze huidige productie De Olifantman",
     "image": "/assets/repetities-olifantman.jpg",
     "category": "Backstage",
-    "createdAt": "2024-11-15T00:00:00Z",
-    "updatedAt": "2024-11-15T00:00:00Z"
+    "createdAt": "2025-10-15T00:00:00Z",
+    "updatedAt": "2025-10-15T00:00:00Z"
   },
   {
     "id": 2,
-    "title": "Première avond Olifantman",
-    "description": "Sfeerbeelden van de succesvolle première van Olifantman",
-    "image": "/assets/premiere-olifantman.jpg",
+    "title": "De Olifantman poster",
+    "description": "Officiële poster voor De Olifantman - november 2025",
+    "image": "/assets/olifantman-poster.jpg",
     "category": "Producties",
-    "createdAt": "2024-12-15T00:00:00Z",
-    "updatedAt": "2024-12-15T00:00:00Z"
+    "createdAt": "2025-10-15T00:00:00Z",
+    "updatedAt": "2025-10-15T00:00:00Z"
   }
 ]
