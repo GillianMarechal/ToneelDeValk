@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Calendar, X, Mail, ArrowRight } from "lucide-react";
 import { Link } from "wouter";
+import ProductionPopup from "./production-popup";
+import { useQuery } from "@tanstack/react-query";
 
 interface ShowPopupProps {
   show: {
@@ -16,6 +18,15 @@ interface ShowPopupProps {
 export default function ShowPopup({ show }: ShowPopupProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [showProductionPopup, setShowProductionPopup] = useState(false);
+
+  // Fetch productions to get the specific production data
+  const { data: productions } = useQuery({
+    queryKey: ["/api/productions"],
+  });
+
+  // Find the current production (De Olifantman)
+  const currentProduction = productions?.find((p: any) => p.status === "current");
 
   useEffect(() => {
     // Always show popup on page load for testing
@@ -40,6 +51,15 @@ export default function ShowPopup({ show }: ShowPopupProps) {
     handleClose();
   };
 
+  const handleMoreInfo = () => {
+    sessionStorage.setItem('showPopupShown', 'true');
+    setIsAnimating(false);
+    setTimeout(() => {
+      setIsVisible(false);
+      setShowProductionPopup(true);
+    }, 300);
+  };
+
   if (!isVisible) return null;
 
   return (
@@ -51,7 +71,6 @@ export default function ShowPopup({ show }: ShowPopupProps) {
         }`}
         onClick={handleClose}
       />
-      
       {/* Modal Container */}
       <div className="fixed inset-0 flex items-center justify-center p-4 pointer-events-none">
         <div 
@@ -141,7 +160,7 @@ export default function ShowPopup({ show }: ShowPopupProps) {
             <div className="w-3 h-3 bg-theatre-gold rounded-full"></div>
           </div>
           <div className="absolute bottom-0 right-4 transform translate-y-1/2">
-            <div className="w-2 h-2 bg-theatre-red rounded-full"></div>
+            <div className="w-2 h-2 rounded-full bg-[rgba(230, 196, 70, 0)]"></div>
           </div>
         </div>
       </div>
