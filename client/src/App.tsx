@@ -7,6 +7,7 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import About from "@/pages/about";
 import Productions from "@/pages/productions";
+import ProductionDetail from "@/pages/production-detail";
 import Cast from "@/pages/cast";
 import News from "@/pages/news";
 import Gallery from "@/pages/gallery";
@@ -24,6 +25,7 @@ function Router() {
           <Route path="/" component={Home} />
           <Route path="/about" component={About} />
           <Route path="/productions" component={Productions} />
+          <Route path="/productions/:slug" component={ProductionDetail} />
           <Route path="/cast" component={Cast} />
           <Route path="/news" component={News} />
           <Route path="/gallery" component={Gallery} />

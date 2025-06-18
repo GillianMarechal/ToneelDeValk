@@ -148,15 +148,16 @@ export default function ShowPopup({ show }: ShowPopupProps) {
                 </Button>
               </a>
               
-              <Button 
-                onClick={handleMoreInfo}
-                variant="outline" 
-                className="w-full border-2 border-theatre-navy/20 text-theatre-navy hover:bg-theatre-navy hover:text-white py-3 rounded-xl transition-all duration-300"
-                size="lg"
-              >
-                Meer Informatie
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
+              <Link href="/productions/olifantenman" onClick={handleTicketClick}>
+                <Button 
+                  variant="outline" 
+                  className="w-full border-2 border-theatre-navy/20 text-theatre-navy hover:bg-theatre-navy hover:text-white py-3 rounded-xl transition-all duration-300"
+                  size="lg"
+                >
+                  Meer Informatie
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
             </div>
 
             {/* Footer */}
