@@ -70,7 +70,7 @@ export default function ProductionCard({ production }: ProductionCardProps) {
       >
         <div className="relative">
           <img 
-            src={production.image} 
+            src="/attached_assets/olifantenman_Final.png" 
             alt={`Poster van ${production.title}`}
             className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" 
           />
@@ -119,7 +119,6 @@ export default function ProductionCard({ production }: ProductionCardProps) {
           </div>
         </div>
       </div>
-
       <ProductionPopup 
         production={production}
         open={showPopup}
