@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Ticket } from "lucide-react";
 import logoPath from "@assets/logodevalk_1750106393368.png";
 
 export default function Header() {
@@ -73,6 +73,21 @@ export default function Header() {
                 </a>
               </Link>
             ))}
+            
+            {/* Buy Tickets Button */}
+            <a 
+              href="https://www.toneeldevalk.be" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-block"
+            >
+              <Button 
+                className="bg-theatre-gold hover:bg-theatre-gold/90 text-theatre-navy font-semibold px-6 py-2 rounded-full transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+              >
+                <Ticket className="mr-2 h-4 w-4" />
+                Tickets De Olifantman
+              </Button>
+            </a>
           </div>
           
           {/* Mobile Menu Button */}
@@ -104,6 +119,23 @@ export default function Header() {
                   </a>
                 </Link>
               ))}
+              
+              {/* Mobile Buy Tickets Button */}
+              <div className="px-3 py-2">
+                <a 
+                  href="https://www.toneeldevalk.be" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <Button 
+                    className="w-full bg-theatre-gold hover:bg-theatre-gold/90 text-theatre-navy font-semibold py-3 rounded-lg transition-all duration-300"
+                  >
+                    <Ticket className="mr-2 h-4 w-4" />
+                    Tickets De Olifantman
+                  </Button>
+                </a>
+              </div>
             </div>
           </div>
         )}
