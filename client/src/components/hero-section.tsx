@@ -2,13 +2,12 @@ import { Button } from "@/components/ui/button";
 import { Calendar, ArrowRight } from "lucide-react";
 import { Link } from "wouter";
 import { useState, useEffect } from "react";
-import cyranoBluePath from "@assets/DeValk1_1750105696284.jpg";
-import rostekopSepiaPath from "@assets/devalk2_1750105696285.jpg";
+import cyranoBluePath from "@assets/Oldsite/DeValk1_1750105696284.jpg";
 import logoPath from "@assets/logodevalk_1750106393368.png";
 
 export default function HeroSection() {
   // Start with a random image immediately
-  const [currentImage, setCurrentImage] = useState(Math.floor(Math.random() * 2));
+  const [currentImage, setCurrentImage] = useState(0);
   const [taglineVisible, setTaglineVisible] = useState(true);
 
   const images = [
@@ -17,11 +16,6 @@ export default function HeroSection() {
       alt: "Arme Cyrano - Groep acteurs kijken verwonderd naar de maan",
       title: "Arme Cyrano"
     },
-    {
-      src: rostekopSepiaPath,
-      alt: "Rostekop - Acteur toont verwondering",
-      title: "Rostekop"
-    }
   ];
 
   const taglines = [

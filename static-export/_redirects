@@ -1,1 +1,5 @@
+# Netlify redirects for SPA routing
 /*    /index.html   200
+
+# API routes
+/api/*    /api/:splat   200

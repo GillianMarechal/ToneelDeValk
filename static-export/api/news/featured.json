@@ -1,13 +1,20 @@
 [
   {
     "id": 1,
-    "title": "De Olifantman komt naar Brugge",
-    "excerpt": "Bernard Pomerance's aangrijpende verhaal over moed en menselijkheid speelt op 21, 22, 28 en 29 november in Ma/Z.",
-    "content": "Toneelgroep De Valk presenteert 'De Olifantman' van Bernard Pomerance onder regie van Dominique Berten. Deze ontroerende voorstelling over moed, vriendschap en het overwinnen van je grootste angsten toont hoe we allemaal een beetje olifantman in ons hebben. De voorstellingen vinden plaats op 21, 22, 28 en 29 november 2025 om 20 uur in Ma/Z - Magdalenastraat 27, 8200 Brugge. Tickets zijn verkrijgbaar via www.toneeldevalk.be.",
-    "publishedAt": "2025-10-15T19:00:00Z",
+    "title": "Olifantman première groot succes",
+    "excerpt": "De première van onze nieuwste productie werd enthousiast ontvangen door publiek en pers.",
+    "content": "De première van Olifantman op zaterdag 14 december was een overweldigend succes. Het publiek was zichtbaar geroerd door de krachtige voorstelling over moed en vriendschap. De cast ontving een minutenlange staande ovatie. De voorstelling toont hoe we onze innerlijke kracht kunnen vinden en onze grootste angsten kunnen overwinnen.",
+    "date": "15 December 2024",
     "category": "Nieuws",
-    "featured": true,
-    "createdAt": "2025-10-15T19:00:00Z",
-    "updatedAt": "2025-10-15T19:00:00Z"
+    "featured": true
+  },
+  {
+    "id": 2,
+    "title": "Toneelgroep De Valk wint regionale theaterprijs",
+    "excerpt": "Wij zijn trots om te melden dat onze groep is erkend voor 'Beste Community Theater Productie 2024'.",
+    "content": "De regionale theaterjury heeft ons geëerd met de prestigieuze prijs voor beste gemeenschapstheater van het jaar. Deze erkenning toont aan dat onze inzet voor kwaliteitstheater wordt gewaardeerd door zowel het publiek als de vakjury.",
+    "date": "5 December 2024",
+    "category": "Prijzen",
+    "featured": true
   }
 ]

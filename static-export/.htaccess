@@ -1,4 +1,12 @@
 Options -MultiViews
 RewriteEngine On
+
+# Handle API routes
 RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} ^/api/
+RewriteRule ^api/(.*)$ /api/$1 [L]
+
+# Handle SPA routing
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} !^/api/
 RewriteRule ^ index.html [QSA,L]

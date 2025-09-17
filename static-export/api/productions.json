@@ -1,14 +1,32 @@
 [
   {
     "id": 1,
-    "title": "De Olifantman",
-    "description": "Een ontroerende voorstelling over moed, vriendschap en het overwinnen van je grootste angsten. Deze productie toont hoe we allemaal een beetje olifantman in ons hebben - soms groot en sterk, soms kwetsbaar en bang.",
-    "duration": "2 uur 30 min (inclusief pauze)",
-    "dates": "21, 22, 28 en 29 november 2025 - 20 uur",
+    "title": "Olifantman",
+    "description": "Een ontroerende voorstelling over moed, vriendschap en het overwinnen van je grootste angsten. Deze krachtige productie toont hoe we onze innerlijke kracht kunnen vinden.",
+    "duration": "2 uur 30 min",
+    "dates": "December 2024 - Maart 2025",
     "status": "current",
-    "image": "/assets/olifantman-poster.jpg",
-    "genre": "Drama/Familie",
-    "createdAt": "2024-11-01T00:00:00Z",
-    "updatedAt": "2024-12-01T00:00:00Z"
+    "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
+    "genre": "Drama"
+  },
+  {
+    "id": 2,
+    "title": "Dwaasheid",
+    "description": "Een eerdere krachtige productie over menselijke dwaasheid en wijsheid. Een verhaal dat ons confronteert met onze eigen tekortkomingen.",
+    "duration": "2 uur",
+    "dates": "Maart - April 2025",
+    "status": "past",
+    "image": "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
+    "genre": "Drama"
+  },
+  {
+    "id": 3,
+    "title": "Coo Coo",
+    "description": "Een succesvolle komedie uit 2024 die het publiek wist te boeien met humor en hart.",
+    "duration": "1.5 uur",
+    "dates": "November 2024",
+    "status": "past",
+    "image": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
+    "genre": "Komedie"
   }
 ]
